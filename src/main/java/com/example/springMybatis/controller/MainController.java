@@ -37,7 +37,7 @@ public class MainController {
         return "login.html";
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String index(@RequestParam("name")String name,
                         @RequestParam("password")String password,
                         HttpServletResponse response) {
@@ -50,13 +50,14 @@ public class MainController {
                 user = t;
         }
         if (user != null) {
+            //response.addHeader("Allow","GET, POST");
             Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60*60);
             response.addCookie(cookie);
-            return "index.html";
+            return "redirect:index.html";
         }
         else
-            return "404.html";
+            return "redirect:404.html";
     }
 
     @RequestMapping("/logout")
@@ -142,6 +143,8 @@ public class MainController {
         }
         return null;
     }
+
+
 
     public static Cookie search(Cookie[] cookies) {
         if (cookies == null)
