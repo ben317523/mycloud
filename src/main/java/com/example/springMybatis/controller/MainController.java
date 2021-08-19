@@ -15,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ public class MainController {
     static {
         users = new User[10];
         users[0] = new User(0,"ben","89762230");
+        users[1] = new User(1,"kenny","123456");
     }
 
     @RequestMapping("/")
@@ -76,7 +78,7 @@ public class MainController {
             System.out.println("valid token");
         else
             return "Unauthorized";
-        File convertFile = new File("src\\\\main\\\\resources\\\\static\\\\files\\\\"+file.getOriginalFilename());
+        File convertFile = new File("/data/files/"+file.getOriginalFilename());
         convertFile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertFile);
         fout.write(file.getBytes());
@@ -93,7 +95,7 @@ public class MainController {
 
 
         try {
-            File folder = new File("src\\\\main\\\\resources\\\\static\\\\files");
+            File folder = new File("/data/files");
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
@@ -103,12 +105,12 @@ public class MainController {
                 }
             };
             String[] searchedName = folder.list(filter);
-            File file = new File("src\\\\main\\\\resources\\\\static\\\\files\\\\"+((searchedName.length!=0)?searchedName[0]:"") );
+            File file = new File("/data/files/"+((searchedName.length!=0)?searchedName[0]:"") );
 
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", ((searchedName!=null)?searchedName[0]:"")));
+            headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", ((searchedName!=null)?encode(searchedName[0]):"")));
 
             headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
             headers.add("Pragma", "no-cache");
@@ -132,7 +134,7 @@ public class MainController {
     @ResponseBody
     public String[] getAllFiles() {
         try{
-            File folder = new File("src\\\\main\\\\resources\\\\static\\\\files");
+            File folder = new File("/data/files");
             String[] searchedName = folder.list();
             return searchedName;
         } catch (Exception e) {
@@ -149,5 +151,15 @@ public class MainController {
                 return cookie;
         }
         return null;
+    }
+
+    public static String encode(String filename){
+        try {
+            URI uri = new URI(null,null,filename,null);
+            String encodedName = uri.toASCIIString();
+            return encodedName;
+        }catch (Exception e) {
+            return filename;
+        }
     }
 }
