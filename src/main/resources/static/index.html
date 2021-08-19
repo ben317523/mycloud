@@ -23,7 +23,7 @@
             //alert(document.getElementById('download').href);
         }
         $(document).ready(function() {
-            $.get("http://localhost:8081/getAllFiles",function(data,status){
+            $.get("http://172.31.6.33:8081/getAllFiles",function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
