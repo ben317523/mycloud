@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            margin : 0 auto;
+            text-align: center;
+        }
+
+
+    </style>
+
+    <script>
+        function changeRef(){
+            let filename = document.getElementById('fileName').value;
+            document.getElementById('download').href = 'http://localhost:8080/files/'+filename;
+            document.getElementById('download').download = 'http://localhost:8080/files/'+filename;
+            //alert(document.getElementById('download').href);
+        }
+        $(document).ready(function() {
+            $.get("http://localhost:8080/getAllFiles",function(data,status){
+                console.log(data);
+                for (let i = 0; i < data.length; i++) {
+
+                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;"+data[i];
+                }
+            })
+        }
+        );
+
+    </script>
+
+</head>
+<body>
+
+
+
+<br><br>
+<form enctype="multipart/form-data" action="/upload" method="post"  >
+    <label>Upload file:</label>
+    <input type="file" name="file"><br><br>
+    <input type="submit" value="upload">
+</form><br><br><hr>
+
+<p id="allfile"></p>
+<form id="downloadFile" action="/download" method="get">
+    <label for="fileName">File name: </label>
+    <input id="fileName" name="param" placeholder="Enter the file name" onchange="changeRef()"><br><br>
+    <input type="submit" ></input>
+    <a id="download" href="" download >Download</a>
+</form><br>
+
+<form action="/logout">
+<input type="submit" value="log out"></input>
+</form>
+</body>
+</html>

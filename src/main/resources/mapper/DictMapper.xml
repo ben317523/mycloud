@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springMybatis.mapper.DictMapper">
+    <resultMap id="dictResultMap" type="com.example.springMybatis.entity.Dict">
+        <id property="id" column="dict_id"></id>
+        <id property="code" column="dict_code"></id>
+        <id property="codename" column="dict_codename"></id>
+        <id property="codetype" column="dict_codetype"></id>
+        <id property="typename" column="dict_typename"></id>
+        <id property="codeorder" column="dict_codeorder"></id>
+    </resultMap>
+    <select id="findById" resultType="com.example.springMybatis.entity.Dict">
+        select id,code from x_dict where id = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.example.springMybatis.entity.Dict">
+        select * from x_dict
+    </select>
+</mapper>
