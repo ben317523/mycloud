@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/dict")
-public class dbController {
-    @Autowired
-    private dbService dbs;
-
-    @GetMapping("/getDict")
-    public Dict getDict(@RequestParam("id") int id){
-        Dict d = dbs.findById(id);
-        return d;
-    }
-
-    @GetMapping("getAll")
-    public List<Dict> getAll(){
-        return dbs.findAllDict();
-    }
-}
+//@RestController
+//@RequestMapping("/dict")
+// public class dbController {
+//     //@Autowired
+//     //private dbService dbs;
+//
+//     @GetMapping("/getDict")
+//     public Dict getDict(@RequestParam("id") int id){
+//         Dict d = dbs.findById(id);
+//         return d;
+//     }
+//
+//     @GetMapping("getAll")
+//     public List<Dict> getAll(){
+//         return dbs.findAllDict();
+//     }
+// }

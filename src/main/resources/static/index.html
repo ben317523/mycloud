@@ -23,7 +23,7 @@
             //alert(document.getElementById('download').href);
         }
         $(document).ready(function() {
-            $.get("http://localhost:8080/getAllFiles",function(data,status){
+            $.get("http://localhost:8081/getAllFiles",function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
@@ -52,7 +52,7 @@
     <label for="fileName">File name: </label>
     <input id="fileName" name="param" placeholder="Enter the file name" onchange="changeRef()"><br><br>
     <input type="submit" ></input>
-    <a id="download" href="" download >Download</a>
+
 </form><br>
 
 <form action="/logout">

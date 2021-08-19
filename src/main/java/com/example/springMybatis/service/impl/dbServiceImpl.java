@@ -8,18 +8,18 @@ import com.example.springMybatis.service.dbService;
 
 import java.util.List;
 
-@Service
-public class dbServiceImpl implements dbService{
-    @Autowired
-    private DictMapper dictMapper;
-
-    @Override
-    public Dict findById(int id){
-        return (dictMapper.findById(id));
-    }
-
-    @Override
-    public List<Dict> findAllDict(){
-        return (dictMapper.findAll());
-    }
-}
+//@Service
+// public class dbServiceImpl implements dbService{
+//     @Autowired
+//     private DictMapper dictMapper;
+//
+//     @Override
+//     public Dict findById(int id){
+//         return (dictMapper.findById(id));
+//     }
+//
+//     @Override
+//     public List<Dict> findAllDict(){
+//         return (dictMapper.findAll());
+//     }
+// }

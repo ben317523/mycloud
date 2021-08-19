@@ -1,8 +1,6 @@
 package com.example.springMybatis.controller;
 
 import com.example.springMybatis.entity.User;
-import com.example.springMybatis.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,17 +15,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
 public class MainController {
-    @Autowired
-    private UserMapper userMapper;
-    private String token = "dsgufn-d626sfsdfJHiI-Nnfvas94832u9f-h8e9q-UGubgyuGSg-7sASYAHya-8ashOIHA-8ya8iHDT7id-hui";
+    //@Autowired
+    //private UserMapper userMapper;
+    private static User[] users;
+    private static String token = "dsgufn-d626sfsdfJHiI-Nnfvas94832u9f-h8e9q-UGubgyuGSg-7sASYAHya-8ashOIHA-8ya8iHDT7id-hui";
+
+    static {
+        users = new User[10];
+        users[0] = new User(0,"ben","89762230");
+    }
 
     @RequestMapping("/")
     public String login(){
@@ -38,7 +39,14 @@ public class MainController {
     public String index(@RequestParam("name")String name,
                         @RequestParam("password")String password,
                         HttpServletResponse response) {
-        User user = userMapper.findUser(name, password);
+        //User user = userMapper.findUser(name, password);
+        User user = null;
+        for (User t : users) {
+            if (t == null)
+                continue;
+            if (t.getUserName().equals(name) && t.getPassword().equals(password))
+                user = t;
+        }
         if (user != null) {
             Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60*60);
