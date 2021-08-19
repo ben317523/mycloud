@@ -146,6 +146,7 @@ public class MainController {
 
     @RequestMapping("/delete")
     @CrossOrigin(value = "*")
+    @ResponseBody
     public String delete(@RequestParam("name")String name) {
         try {
             File deletedFile = new File("/data/files/"+name);
