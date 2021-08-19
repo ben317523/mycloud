@@ -144,7 +144,18 @@ public class MainController {
         return null;
     }
 
-
+    @RequestMapping("/delete")
+    @CrossOrigin(value = "*")
+    public String delete(@RequestParam("name")String name) {
+        try {
+            File deletedFile = new File("/data/files/"+name);
+            deletedFile.delete();
+            return "File : "+name+" deleted!";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "File not found!";
+        }
+    }
 
     public static Cookie search(Cookie[] cookies) {
         if (cookies == null)
