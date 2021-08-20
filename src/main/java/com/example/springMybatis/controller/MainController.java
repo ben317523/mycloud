@@ -84,7 +84,7 @@ public class MainController {
         convertFile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertFile);
         BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[2048];
         int readBytes = 0;
         while ((readBytes = fin.read(buffer)) != -1) {
             fout.write(buffer,0,readBytes);
