@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -262,6 +263,7 @@ public class MainController {
                 }
             };
             String[] searchedName = folder.list(filter);
+            Arrays.sort(searchedName);
             return searchedName;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -278,6 +280,7 @@ public class MainController {
             if (!folder.exists())
                 return null;
             String[] searchedName = folder.list();
+            Arrays.sort(searchedName);
             return searchedName;
         } catch (Exception e) {
             System.out.println(e.getMessage());
