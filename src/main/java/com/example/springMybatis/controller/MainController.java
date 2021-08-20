@@ -30,6 +30,7 @@ public class MainController {
         users = new User[10];
         users[0] = new User(0,"ben","89762230");
         users[1] = new User(1,"kenny","123456");
+        users[2] = new User(2,"guest","123456");
     }
 
     @RequestMapping("/")
@@ -54,6 +55,11 @@ public class MainController {
             Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60*60);
             response.addCookie(cookie);
+
+            Cookie uname = new Cookie("name",name);
+            uname.setMaxAge(60*60);
+            response.addCookie(uname);
+
             return "redirect:index.html";
         }
         else
@@ -67,6 +73,10 @@ public class MainController {
         Cookie cookie = new Cookie("token",null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+
+        Cookie uname = new Cookie("name",null);
+        uname.setMaxAge(0);
+        response.addCookie(uname);
         //response.addHeader("Clear-Site-Data","\"cache\", \"cookies\", \"storage\", \"executionContexts\"");
         return "<h1>Log Out!</h1><script>var newWindow; setTimeout(newWindow = window.open('login.html','_self'),1000);setTimeout(newWindow.close(),2000);</script>";
     }
@@ -81,7 +91,6 @@ public class MainController {
             return "Unauthorized";
 
         File convertFile = new File("/data/files/"+file.getOriginalFilename());
-        convertFile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertFile);
         BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
         byte[] buffer = new byte[2048];
@@ -90,7 +99,35 @@ public class MainController {
             fout.write(buffer,0,readBytes);
         }
         fout.close();
+        fin.close();
         return "File is upload successfully";
+    }
+
+    @RequestMapping(value = "/privateUpload",method = RequestMethod.POST)
+    @CrossOrigin("*")
+    public ResponseEntity privateUpload(@RequestParam("file") MultipartFile file,
+                                @CookieValue(value = "name",required = false) String name,
+                                HttpServletRequest request) throws IOException {
+        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
+            System.out.println("valid token");
+        else
+            return ResponseEntity.status(403).body("Unauthorized");
+
+        File userPath = new File("/data/files/"+name);
+        if (!userPath.exists())
+            userPath.mkdir();
+
+        File convertFile = new File("/data/files/"+name+"/"+file.getOriginalFilename());
+        FileOutputStream fout = new FileOutputStream(convertFile);
+        BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
+        byte[] buffer = new byte[2048];
+        int readBytes = 0;
+        while ((readBytes = fin.read(buffer)) != -1) {
+            fout.write(buffer,0,readBytes);
+        }
+        fout.close();
+        fin.close();
+        return ResponseEntity.ok("File is upload successfully");
     }
 
     @RequestMapping(value = "/download")
@@ -167,6 +204,22 @@ public class MainController {
     public String[] getAllFiles() {
         try{
             File folder = new File("/data/files");
+            String[] searchedName = folder.list();
+            return searchedName;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @RequestMapping("/getUserFiles")
+    @CrossOrigin("*")
+    @ResponseBody
+    public String[] getUserFiles(@CookieValue("name")String name) {
+        try {
+            File folder = new File("/data/files/"+name);
+            if (!folder.exists())
+                return null;
             String[] searchedName = folder.list();
             return searchedName;
         } catch (Exception e) {

@@ -11,43 +11,87 @@
             margin : 0 auto;
             text-align: center;
         }
-
+        nav a {
+            margin-right : 4%;
+        }
 
     </style>
 
     <script>
-        function changeRef(){
-            let filename = document.getElementById('fileName').value;
-            document.getElementById('download').href = 'http://localhost:8080/files/'+filename;
-            document.getElementById('download').download = 'http://localhost:8080/files/'+filename;
-            //alert(document.getElementById('download').href);
-        }
+
         $(document).ready(function() {
+            document.getElementById("privateUpload").addEventListener("click", function(event){
+                event.preventDefault();
+                var fd = new FormData();
+                let files = $('#uploadFile')[0].files;
+
+                if(files.length > 0 ){
+                   fd.append('file',files[0]);
+
+                   $.ajax({
+                      url: 'http://100.25.139.3:8081/privateUpload',
+                      type: 'post',
+                      data: fd,
+                      contentType: false,
+                      processData: false,
+                      success: function(response){
+                         if(response != 0){
+                            alert('File uploaded');
+                         }else{
+                            alert('File not uploaded');
+                         }
+                      },
+                   });
+                }else{
+                   alert("Please select a file.");
+                }
+            });
+
             $.get("http://100.25.139.3:8081/getAllFiles",function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;"+data[i];
+                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i];
                 }
-            })
-        }
-        );
+            });
+
+            $.get("http://100.25.139.3:8081/getUserFiles",function(data,status){
+                console.log(data);
+                for (let i = 0; i < data.length; i++) {
+
+                  document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i];
+                }
+            });
+        });
+
+
 
     </script>
 
 </head>
 <body>
-
+<br>
+<nav>
+    <a href="#upload">Upload</a>
+    <a href="#allfile">Download</a>
+    <a href="#downloadProxy">Download To Server</a>
+    <a href="#delete">Delete</a>
+</nav>
 
 
 <br><br>
-<form enctype="multipart/form-data" action="/upload" method="post"  >
+<form id="upload" enctype="multipart/form-data" action="/upload" method="post"  >
     <label>Upload file:</label>
-    <input type="file" name="file"><br><br>
-    <input type="submit" value="upload">
-</form><br><br><hr>
+    <input id="uploadFile" type="file" name="file"><br><br>
+    <input type="submit" value="Upload"><br><br>
+    <button id="privateUpload">Upload(private)</button>
+</form>
+<br><br><hr>
 
+<h3>Public: </h3>
 <p id="allfile"></p>
+<h3>Private: </h3>
+<p id="allPrivateFile"></p>
 <form id="downloadFile" action="/download" method="get">
     <label for="fileName">File name: </label>
     <input id="fileName" name="param" size="30" placeholder="Enter the file name" ><br><br>
@@ -55,7 +99,7 @@
 
 </form><br><br>
 
-<form action="/downloadProxy" method="post">
+<form id="downloadProxy" action="/downloadProxy" method="post">
     <label for="downloadUrl">Url: </label>
     <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
     <label for="targetName">Target Name: </label>
@@ -64,14 +108,14 @@
 </form><br>
 <hr>
 
-<form action="/delete" method="post">
+<form id="delete" action="/delete" method="post">
     <label for="deleteName">Delete File Name:</label>
     <input id="deleteName" name="name" size="30" placeholder="Enter the name of file you want to delete"><br><br>
     <input type="submit" value="Delete">
 </form><br><br>
 
 <form action="/logout">
-<input type="submit" value="log out" ></input>
-</form>
+<input type="submit" value="Log out" ></input>
+</form><br><br><hr>
 </body>
 </html>
