@@ -136,6 +136,32 @@ public class MainController {
 
     }
 
+    @RequestMapping("/downloadProxy")
+    @ResponseBody
+    public String downloadProxy(@RequestParam(value = "url") String url,
+                                @RequestParam(value = "targetName")String targetName,
+                                HttpServletRequest request) {
+        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
+            System.out.println("valid token");
+        else
+            return "Unauthorized";
+
+        Runtime run = Runtime.getRuntime();
+
+        Process p = null;
+        String cmd = "sudo nohup wget -O /data/files/"+targetName+" "+url;
+        try {
+            p = run.exec(cmd);
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("ERROR.RUNNING.CMD");
+            return "not ok";
+        }
+        return "ok";
+    }
+
     @RequestMapping("/getAllFiles")
     @CrossOrigin(value = "*")
     @ResponseBody
@@ -153,7 +179,12 @@ public class MainController {
     @RequestMapping("/delete")
     @CrossOrigin(value = "*")
     @ResponseBody
-    public String delete(@RequestParam("name")String name) {
+    public String delete(@RequestParam("name")String name, HttpServletRequest request) {
+        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
+            System.out.println("valid token");
+        else
+            return "Unauthorized";
+
         try {
             File deletedFile = new File("/data/files/"+name);
             if (!deletedFile.exists())

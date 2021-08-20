@@ -50,10 +50,19 @@
 <p id="allfile"></p>
 <form id="downloadFile" action="/download" method="get">
     <label for="fileName">File name: </label>
-    <input id="fileName" name="param" placeholder="Enter the file name" ><br><br>
+    <input id="fileName" name="param" size="30" placeholder="Enter the file name" ><br><br>
     <input type="submit" value="Download" ></input>
 
-</form><br><hr>
+</form><br><br>
+
+<form action="/downloadProxy" method="post">
+    <label for="downloadUrl">Url: </label>
+    <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
+    <label for="targetName">Target Name: </label>
+    <input id="targetName" name="targetName" size="30" placeholder="Enter the name of file"><br><br>
+    <input type="submit" value="Download To Server">
+</form><br>
+<hr>
 
 <form action="/delete" method="post">
     <label for="deleteName">Delete File Name:</label>
