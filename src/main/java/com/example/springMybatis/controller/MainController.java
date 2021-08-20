@@ -149,7 +149,7 @@ public class MainController {
         Runtime run = Runtime.getRuntime();
 
         Process p = null;
-        String cmd = "sudo nohup wget -O /data/files/"+targetName+" "+url;
+        String cmd = "wget -O /data/files/"+targetName+" "+url;
         try {
             p = run.exec(cmd);
 
