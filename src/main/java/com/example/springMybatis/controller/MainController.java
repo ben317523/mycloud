@@ -79,10 +79,16 @@ public class MainController {
             System.out.println("valid token");
         else
             return "Unauthorized";
+
         File convertFile = new File("/data/files/"+file.getOriginalFilename());
         convertFile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertFile);
-        fout.write(file.getBytes());
+        BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
+        byte[] buffer = new byte[1024];
+        int readBytes = 0;
+        while ((readBytes = fin.read(buffer)) != -1) {
+            fout.write(buffer,0,readBytes);
+        }
         fout.close();
         return "File is upload successfully";
     }
@@ -150,6 +156,8 @@ public class MainController {
     public String delete(@RequestParam("name")String name) {
         try {
             File deletedFile = new File("/data/files/"+name);
+            if (!deletedFile.exists())
+                return "File not found!";
             deletedFile.delete();
             return "File : "+name+" deleted!";
         } catch (Exception e) {
