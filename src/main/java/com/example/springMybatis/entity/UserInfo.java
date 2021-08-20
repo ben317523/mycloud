@@ -9,7 +9,7 @@ public class UserInfo {
     private String name;
     private Integer publicNo;
     private Integer privateNo;
-    private Long spaceUsed;
+    private Double spaceUsed;
 
     public UserInfo() {
 

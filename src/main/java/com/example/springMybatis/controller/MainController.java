@@ -312,9 +312,9 @@ public class MainController {
             if (file.isFile())
                 totalSpace += file.length();
             else
-                totalSpace += (file.getTotalSpace() -file.getUsableSpace());
+                totalSpace += (file.getTotalSpace() -file.getFreeSpace());
         }
-        data.setSpaceUsed(totalSpace);
+        data.setSpaceUsed(totalSpace/1024.0);
         return ResponseEntity.ok(data);
     }
 
