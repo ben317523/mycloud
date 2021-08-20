@@ -106,9 +106,9 @@ public class MainController {
     @RequestMapping(value = "/privateUpload",method = RequestMethod.POST)
     @CrossOrigin("*")
     public ResponseEntity privateUpload(@RequestParam("file") MultipartFile file,
-                                @CookieValue(value = "name",required = false) String name,
-                                HttpServletRequest request) throws IOException {
-        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
+                                @RequestParam(value = "name") String name,
+                                @RequestParam(value = "token") String userToken) throws IOException {
+        if (userToken != null && token.equals(userToken))
             System.out.println("valid token");
         else
             return ResponseEntity.status(403).body("Unauthorized");

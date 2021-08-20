@@ -27,6 +27,33 @@
 
         $(document).ready(function() {
 
+            $('#privateUpload').click(function(event){
+                event.preventDefault();
+                var fd = new FormData();
+                var files = $('#uploadFile')[0].files;
+
+                if(files.length > 0 ){
+                    fd.append('file',files[0]);
+
+                    $.ajax({
+                        type : 'POST',
+                        url : "http://100.25.139.3:8081/privateUpload?name="+getCookie('name')+"&token="+getCookie('token'),
+                        data : fd,
+                        contentType: false,
+                        processData: false,
+                        success: function(response){
+                             if(response != 0){
+                                alert('file uploaded');
+                             }else{
+                                alert('file not uploaded');
+                             }
+                        },
+                    });
+                } else {
+                    alert("Please select a file.");
+                }
+            });
+
             $.get("http://100.25.139.3:8081/getAllFiles",function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
