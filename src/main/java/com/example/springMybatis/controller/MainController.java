@@ -152,9 +152,10 @@ public class MainController {
         String cmd = "sudo wget -O /data/files/"+targetName+" "+url;
         try {
             p = run.exec(cmd);
-
+            p.waitFor();
+            //p.wait();
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             e.printStackTrace();
             System.out.println("ERROR.RUNNING.CMD");
             return "not ok";
