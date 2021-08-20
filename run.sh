@@ -7,4 +7,4 @@ echo 'application stoped'
 
 mvn clean package -Dmaven.test.skip=true -U
 echo "starting application.."
-nohup java -jar -Xmx200m ./target/springMybatis-0.0.1-SNAPSHOT.jar > my.out &
+nohup java -jar -Xmx200m ./target/springMybatis-0.0.1-SNAPSHOT.jar > my.out 2>&1 &
