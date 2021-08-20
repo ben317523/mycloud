@@ -173,6 +173,52 @@ public class MainController {
 
     }
 
+    @RequestMapping("/downloadPrivate")
+    public ResponseEntity downloadPrivate(@RequestParam("param") String param,
+                                          @CookieValue("name") String name,
+                                          HttpServletRequest request) throws IOException {
+        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
+            System.out.println("valid token");
+        else
+            return ResponseEntity.status(403).body("Unauthorized");
+
+
+        try {
+            File folder = new File("/data/files/"+name);
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File f, String name) {
+                    Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
+                    Matcher matcher = pattern.matcher(name);
+                    return matcher.find();
+                }
+            };
+            String[] searchedName = folder.list(filter);
+            File file = new File("/data/files/"+name+"/"+((searchedName.length!=0)?searchedName[0]:"") );
+
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", ((searchedName!=null)?encode(searchedName[0]):"")));
+
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.status(404)
+                    .body("File not found");
+        }
+
+    }
+
+
     @RequestMapping("/downloadProxy")
     @ResponseBody
     public String downloadProxy(@RequestParam(value = "url") String url,
@@ -215,7 +261,7 @@ public class MainController {
     @RequestMapping("/getUserFiles")
     @CrossOrigin("*")
     @ResponseBody
-    public String[] getUserFiles(@CookieValue("name")String name) {
+    public String[] getUserFiles(@RequestParam("name")String name) {
         try {
             File folder = new File("/data/files/"+name);
             if (!folder.exists())
