@@ -1,4 +1,7 @@
 #!/bin/bash
+
+cd /home/ubuntu/workspace/fileServer/fileServer
+
 kill -9 $(lsof -t -i:8081 -sTCP:LISTEN)
 echo 'application stoped'
 
