@@ -32,6 +32,9 @@ public class MainController {
         users[0] = new User(0,"ben","89762230");
         users[1] = new User(1,"kenny","123456");
         users[2] = new User(2,"guest","123456");
+        users[3] = new User(3,"ken","123456");
+        users[4] = new User(4,"pui","123456");
+        users[5] = new User(5,"breonna","123456");
     }
 
     @RequestMapping("/")
@@ -65,6 +68,23 @@ public class MainController {
         }
         else
             return "redirect:404.html";
+    }
+
+    @RequestMapping(value = "/changePassword",method = RequestMethod.POST)
+    public String changePassword(@RequestParam("name")String name,
+                                         @RequestParam("password")String password,
+                                         @RequestParam("new_password")String newPassword,
+                                         @RequestParam("new_password_confirm")String newPasswordConfirm) {
+        for (User u : users) {
+            if (u != null){
+                if (u.getUserName().equals(name)
+                        && u.getPassword().equals(password) && newPassword.equals(newPasswordConfirm)){
+                    u.setPassword(newPassword);
+                    return "redirect:login.html";
+                }
+            }
+        }
+        return "redirect:fail.html";
     }
 
     @RequestMapping("/logout")
