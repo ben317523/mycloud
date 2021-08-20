@@ -1,6 +1,7 @@
 package com.example.springMybatis.controller;
 
 import com.example.springMybatis.entity.User;
+import com.example.springMybatis.entity.UserInfo;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -289,6 +290,32 @@ public class MainController {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    @RequestMapping("/getUserInfo")
+    @ResponseBody
+    public ResponseEntity getUserInfo(@RequestParam("name")String uname,
+                                @RequestParam("token")String userToken) {
+        if (userToken != null && token.equals(userToken))
+            System.out.println("valid token");
+        else
+            return ResponseEntity.status(403).body("Unauthorized");
+
+        UserInfo data = new UserInfo();
+        data.setName(uname);
+        data.setPublicNo(getAllFiles().length);
+        data.setPrivateNo(getUserFiles(uname).length);
+        String[] totalFiles = getUserFiles(uname);
+        long totalSpace = 0;
+        for (String f : totalFiles) {
+            File file = new File("/data/files/"+uname+"/"+f);
+            if (file.isFile())
+                totalSpace += file.length();
+            else
+                totalSpace += (file.getTotalSpace() -file.getUsableSpace());
+        }
+        data.setSpaceUsed(totalSpace);
+        return ResponseEntity.ok(data);
     }
 
     @RequestMapping("/getUserFiles")
