@@ -250,7 +250,18 @@ public class MainController {
     public String[] getAllFiles() {
         try{
             File folder = new File("/data/files");
-            String[] searchedName = folder.list();
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File f, String name) {
+                    File check = new File(f.getAbsolutePath()+"/"+name);
+                    if (check.isFile())
+                        return true;
+                    else
+                        return false;
+
+                }
+            };
+            String[] searchedName = folder.list(filter);
             return searchedName;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -277,13 +288,19 @@ public class MainController {
     @RequestMapping("/delete")
     @CrossOrigin(value = "*")
     @ResponseBody
-    public String delete(@RequestParam("name")String name, HttpServletRequest request) {
+    public String delete(@RequestParam("name")String name,
+                         @CookieValue("name")String cname,
+                         HttpServletRequest request) {
         if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
             System.out.println("valid token");
         else
             return "Unauthorized";
 
         try {
+            String[] lists = name.split("/");
+            if (lists.length > 1 && !lists[0].equals(cname))
+                return "Not Allowed. This file does not belong to you";
+
             File deletedFile = new File("/data/files/"+name);
             if (!deletedFile.exists())
                 return "File not found!";
