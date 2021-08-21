@@ -80,6 +80,7 @@
                     $("#popupSize").text("Size :");
                 });
 
+                $.post("/clearTemp");
                 location.reload();
                 //$('body').fadeTo('fast',1);
             });
@@ -142,12 +143,23 @@
                     $("#preview").fadeIn('fast');
 
                     await $.post("/preview", { fileName: event.target.innerText, token: $.cookie('token'), isPublic: false, name: $.cookie('name') });
-                    await document.getElementById('video').load();
 
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")) {
+                        $("audio, iframe").hide();
                         $("video.previewMain").show();
                         $("video.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
+                        await document.getElementById('video').load();
 
+                    } else if (event.target.innerText.endsWith(".mp3") || event.target.innerText.endsWith(".wav")) {
+                        $("video, iframe").hide();
+                        $("audio.previewMain").show();
+                        $("audio.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
+                        await document.getElementById('audio').load();
+                    }
+                    else {
+                        $("video, audio").hide();
+                        $("#other").attr("src", "http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/" + event.target.innerText + "&embedded=true");
+                        $("#other").show();
                     }
 
                 });

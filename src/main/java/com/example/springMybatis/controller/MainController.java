@@ -378,6 +378,24 @@ public class MainController {
         return "ok";
     }
 
+    @RequestMapping("/clearTemp")
+    @ResponseBody
+    public String clearTemp(){
+        Runtime run = Runtime.getRuntime();
+
+        Process p = null;
+        String cmd = "sudo rm /data/temp/*.*";
+        try {
+            p = run.exec(cmd);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("ERROR.RUNNING.CMD");
+            return "not ok";
+        }
+        return "ok";
+    }
+
     @RequestMapping(value = "getFileInfo",method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity getFileInfo(@RequestParam("file_name")String fileName,
