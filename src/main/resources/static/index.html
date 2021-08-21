@@ -75,9 +75,17 @@
                 //$('body').fadeTo('fast',1);
             });
 
-            $('#previewClose').click(()=>{
+            $('#previewClose').click(async ()=>{
                 $("#preview").fadeOut('fast');
+                await $("#video").pause();
+                $("#video").attr("src","");
+                await $("#video").load();
+
+                await $("#audio").pause();
+                $("#audio").attr("src","");
+                await $("#audio").load();
             });
+
             //below is needed, otherwise cannot set onclick to not existed elements
             $(document).on("press","#allfile span",function(event){
                 $("#popup").fadeIn('fast');
@@ -86,12 +94,20 @@
                     $("#preview").fadeIn('fast');
 
                     await $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
-                    await document.getElementById('video').load();
+
 
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
                         $("video.previewMain").show();
                         $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+                        await document.getElementById('video').load();
 
+                    } else if (event.target.innerText.endsWith(".mp3") || event.target.innerText.endsWith(".wav")){
+                        $("audio.previewMain").show();
+                        $("audio.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+                        await document.getElementById('audio').load();
+                    }
+                    else {
+                        $("#other").show();
                     }
 
                 });
@@ -107,6 +123,21 @@
 
             $(document).on("press","#allPrivateFile span",function(event){
                 $("#popup").fadeIn('fast');
+
+                $("#popupPreview").click(async ()=>{
+                    $("#preview").fadeIn('fast');
+
+                    await $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : false,name : $.cookie('name')});
+                    await document.getElementById('video').load();
+
+                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
+                        $("video.previewMain").show();
+                        $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+
+                    }
+
+                });
+
                 console.log(event.target.innerText);
                 $.post("/getFileInfo",{isPublic : false,name : $.cookie('name'),file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
                     console.log(data);
