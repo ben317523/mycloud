@@ -39,7 +39,7 @@ function downloadToServer(isPublic){
 
 function deleteFile(isPublic) {
     var deleteName = $("#deleteName").prop("value");
-    $.post("/delete",{name : deleteName,,isPublic : isPublic},function(data,status){
+    $.post("/delete",{name : deleteName,isPublic : isPublic},function(data,status){
         if (status == "success"){
             console.log(data);
             alert("File Deleted");
