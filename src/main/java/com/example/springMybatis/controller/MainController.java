@@ -384,7 +384,8 @@ public class MainController {
     public String clearTemp(){
         System.out.println("Clear Cache");
 
-        FileSystemUtils.deleteRecursively(new File("/data/temp"));
+        boolean result = FileSystemUtils.deleteRecursively(new File("/data/temp"));
+        System.out.println("Clear Cache : "+result);
         return "ok";
     }
 
