@@ -358,12 +358,13 @@ public class MainController {
     }
 
     @RequestMapping("preview")
-    public void preview(@RequestParam("fileName")String fileName,
+    @ResponseBody
+    public String preview(@RequestParam("fileName")String fileName,
                         @RequestParam("token")String userToken,
                         @RequestParam("isPublic")Boolean isPublic,
                         @RequestParam(value = "name",required = false)String name) throws IOException {
         if (userToken == null || !token.equals(userToken))
-            return;
+            return "not ok";
         if (isPublic) {
             File srcFile = new File("/data/files/" + fileName);
             File temp = new File("/data/temp/"+fileName);
@@ -374,7 +375,7 @@ public class MainController {
             FileCopyUtils.copy(srcFile,temp);
 
         }
-
+        return "ok";
     }
 
     @RequestMapping(value = "getFileInfo",method = RequestMethod.POST)
