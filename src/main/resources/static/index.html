@@ -85,6 +85,7 @@
                 $("#popupPreview").click(()=>{
                     $("#preview").fadeIn('fast');
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
+                        $("video.previewMain").show();
                         $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
                     }
                     $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
