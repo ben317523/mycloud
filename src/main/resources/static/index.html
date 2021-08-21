@@ -75,14 +75,12 @@
                 //$('body').fadeTo('fast',1);
             });
 
-            $('#previewClose').click(async ()=>{
+            $('#previewClose').click(()=>{
                 $("#preview").fadeOut('fast');
-                await document.getElementById("video").pause();
-                $("#video").attr("src","");
+                document.getElementById("video").pause();
 
+                document.getElementById("audio").pause();
 
-                await document.getElementById("audio").pause();
-                $("#audio").attr("src","");
 
             });
 
