@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,72 +11,79 @@
 
     <style>
         body {
-            margin : 0 auto;
+            margin: 0 auto;
             text-align: center;
         }
+
         nav a {
-            margin-right : 4%;
+            margin-right: 4%;
         }
+
         #popup {
-            display:none;
+            display: none;
             border: 1px solid black;
-            background-color : #f5f5f5;
-            top : 30%;
+            background-color: #f5f5f5;
+            top: 30%;
             width: 20%;
             position: fixed;
             left: 50%;
             margin-left: -10%;
-            padding-bottom : 2%;
+            padding-bottom: 2%;
             overflow-wrap: break-word;
 
         }
-        #allfile span,#allPrivateFile span {
-            color : #191970;
+
+        #allfile span,
+        #allPrivateFile span {
+            color: #191970;
         }
+
         #preview {
-            display : none;
-            top : 10%;
+            display: none;
+            top: 10%;
             position: fixed;
             left: 50%;
             margin-left: -40%;
-            width : 80%;
-            height : 80%;
-        }
-        .previewMain {
-            display : none;
-            position : relative;
-            width : 80%;
-            height : 80%;
-        }
-        #previewClose {
-            position : absolute;
-            text-align : center;
-            top : 1%;
-            right : 1%;
+            width: 80%;
+            height: 80%;
         }
 
+        .previewMain {
+            display: none;
+            position: relative;
+            width: 80%;
+            height: 80%;
+        }
+
+        #previewClose {
+            position: absolute;
+            text-align: center;
+            top: 1%;
+            right: 1%;
+        }
     </style>
 
     <script>
 
         function getCookie(name) {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop().split(';').shift();
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
 
 
-            $("#popupClose").click(()=>{
-                $("#popup").fadeOut('fast',()=>{
+            $("#popupClose").click(() => {
+                $("#popup").fadeOut('fast', () => {
                     $("#popupName").text("File Name :");
                     $("#popupSize").text("Size :");
                 });
                 //$('body').fadeTo('fast',1);
             });
 
-            $('#previewClose').click(()=>{
+            $('#previewClose').click(() => {
+                $("video,audio").hide();
                 $("#preview").fadeOut('fast');
                 document.getElementById("video").pause();
 
@@ -85,88 +93,88 @@
             });
 
             //below is needed, otherwise cannot set onclick to not existed elements
-            $(document).on("press","#allfile span",function(event){
+            $(document).on("press", "#allfile span", function (event) {
                 $("#popup").fadeIn('fast');
 
-                $("#popupPreview").click(async ()=>{
+                $("#popupPreview").click(async () => {
                     $("#preview").fadeIn('fast');
 
-                    await $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
+                    await $.post("/preview", { fileName: event.target.innerText, token: $.cookie('token'), isPublic: true });
 
 
-                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
+                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")) {
                         $("video.previewMain").show();
-                        $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+                        $("video.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
                         await document.getElementById('video').load();
 
-                    } else if (event.target.innerText.endsWith(".mp3") || event.target.innerText.endsWith(".wav")){
+                    } else if (event.target.innerText.endsWith(".mp3") || event.target.innerText.endsWith(".wav")) {
                         $("audio.previewMain").show();
-                        $("audio.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+                        $("audio.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
                         await document.getElementById('audio').load();
                     }
                     else {
-                        $("#other").attr("src","http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/"+event.target.innerText+"&embedded=true");
+                        $("#other").attr("src", "http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/" + event.target.innerText + "&embedded=true");
                         $("#other").show();
                     }
 
                 });
 
                 console.log(event.target.innerText);
-                $.post("/getFileInfo",{isPublic : true,file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
+                $.post("/getFileInfo", { isPublic: true, file_name: event.target.innerText, token: $.cookie('token') }, function (data, status) {
                     console.log(data);
-                    $("#popupName").text("File Name : "+data.fileName);
-                    $("#popupSize").text("Size : "+data.size+" Bytes ("+(data.size*1.0/1024).toFixed(3)+" KB / "+(data.size*1.0/1024/1024).toFixed(3)+" MB)");
+                    $("#popupName").text("File Name : " + data.fileName);
+                    $("#popupSize").text("Size : " + data.size + " Bytes (" + (data.size * 1.0 / 1024).toFixed(3) + " KB / " + (data.size * 1.0 / 1024 / 1024).toFixed(3) + " MB)");
                 });
 
             });
 
-            $(document).on("press","#allPrivateFile span",function(event){
+            $(document).on("press", "#allPrivateFile span", function (event) {
                 $("#popup").fadeIn('fast');
 
-                $("#popupPreview").click(async ()=>{
+                $("#popupPreview").click(async () => {
                     $("#preview").fadeIn('fast');
 
-                    await $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : false,name : $.cookie('name')});
+                    await $.post("/preview", { fileName: event.target.innerText, token: $.cookie('token'), isPublic: false, name: $.cookie('name') });
                     await document.getElementById('video').load();
 
-                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
+                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")) {
                         $("video.previewMain").show();
-                        $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+                        $("video.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
 
                     }
 
                 });
 
                 console.log(event.target.innerText);
-                $.post("/getFileInfo",{isPublic : false,name : $.cookie('name'),file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
+                $.post("/getFileInfo", { isPublic: false, name: $.cookie('name'), file_name: event.target.innerText, token: $.cookie('token') }, function (data, status) {
                     console.log(data);
-                    $("#popupName").text("File Name : "+data.fileName);
-                    $("#popupSize").text("Size : "+data.size+" Bytes ("+(data.size*1.0/1024).toFixed(3)+" KB / "+(data.size*1.0/1024/1024).toFixed(3)+" MB)");
+                    $("#popupName").text("File Name : " + data.fileName);
+                    $("#popupSize").text("Size : " + data.size + " Bytes (" + (data.size * 1.0 / 1024).toFixed(3) + " KB / " + (data.size * 1.0 / 1024 / 1024).toFixed(3) + " MB)");
                 });
 
             });
 
 
-            $('#privateUpload').click(function(event){
+            $('#privateUpload').click(function (event) {
                 event.preventDefault();
                 var fd = new FormData();
                 var files = $('#uploadFile')[0].files;
 
-                if(files.length > 0 ){
-                    fd.append('file',files[0]);
+                if (files.length > 0) {
+                    fd.append('file', files[0]);
 
                     $.ajax({
-                        type : 'POST',
-                        url : "/privateUpload?name="+getCookie('name')+"&token="+getCookie('token'),
-                        data : fd,
+                        type: 'POST',
+                        url: "/privateUpload?name=" + getCookie('name') + "&token=" + getCookie('token'),
+                        data: fd,
                         contentType: false,
                         processData: false,
-                        success: function(response){
-                             if(response != 0){
+                        success: function (response) {
+                            if (response != 0) {
                                 alert('file uploaded');
-                             }else{
+                            } else {
                                 alert('file not uploaded');
-                             }
+                            }
                         },
                     });
                 } else {
@@ -174,19 +182,19 @@
                 }
             });
 
-            $.get("/getAllFiles",{token : $.cookie('token')},function(data,status){
+            $.get("/getAllFiles", { token: $.cookie('token') }, function (data, status) {
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"<span>"+data[i]+"</span>";
+                    document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<span>" + data[i] + "</span>";
                 }
             });
 
-            $.get("/getUserFiles"+"?name="+getCookie('name'),function(data,status){
+            $.get("/getUserFiles" + "?name=" + getCookie('name'), function (data, status) {
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                  document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"<span>"+data[i]+"</span>";
+                    document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<span>" + data[i] + "</span>";
                 }
             });
         });
@@ -196,88 +204,96 @@
     </script>
 
 </head>
+
 <body>
-<div id="main">
-<br>
-<nav>
-    <a href="#uploadDiv">Upload</a>
-    <a href="#downloadDiv">Download</a>
-    <a href="#proxy">Download To Server</a>
-    <a href="#deleteDiv">Delete</a>
-    <a href="console.html">Console</a>
-</nav>
+    <div id="main">
+        <br>
+        <nav>
+            <a href="#uploadDiv">Upload</a>
+            <a href="#downloadDiv">Download</a>
+            <a href="#proxy">Download To Server</a>
+            <a href="#deleteDiv">Delete</a>
+            <a href="console.html">Console</a>
+        </nav>
 
-<div id="popup">
-    <h4 id="popupName">File Name :</h4>
-    <h4 id="popupSize">Size :</h4>
-    <button id="popupClose">Close</button>&nbsp;
-    <button id="popupPreview">Preview</button>
-</div>
+        <div id="popup">
+            <h4 id="popupName">File Name :</h4>
+            <h4 id="popupSize">Size :</h4>
+            <button id="popupClose">Close</button>&nbsp;
+            <button id="popupPreview">Preview</button>
+        </div>
 
-<div id="preview">
-    <button id="previewClose">X</button>
-<!--    <img class="previewMain" src="">-->
-    <video id="video" class="previewMain" title="video" controls controlsList="nodownload">
-        <source src="">
-        Your browser does not support the video tag.
-    </video>
-    <audio id="audio" class="previewMain" controls controlsList="nodownload">
-        <source src="">
-        Your browser does not support the audio element.
-    </audio>
-    <iframe id="other" class="previewMain" src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650" height="780" style="border: none;"></iframe>
-</div>
+        <div id="preview">
+            <button id="previewClose">X</button>
+            <!--    <img class="previewMain" src="">-->
+            <video id="video" class="previewMain" title="video" controls controlsList="nodownload">
+                <source src="">
+                Your browser does not support the video tag.
+            </video>
+            <audio id="audio" class="previewMain" controls controlsList="nodownload">
+                <source src="">
+                Your browser does not support the audio element.
+            </audio>
+            <iframe id="other" class="previewMain"
+                src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650"
+                height="780" style="border: none;"></iframe>
+        </div>
 
-<br><br>
-<h2 id="uploadDiv"><u>Upload</u></h2>
-<form id="upload" enctype="multipart/form-data" action="/upload" method="post"  >
-    <label>Upload file:</label>
-    <input id="uploadFile" type="file" name="file"><br><br>
-    <input type="submit" value="Upload"><br><br>
-    <button id="privateUpload">Upload(private)</button>
-</form>
-<br><br><hr>
+        <br><br>
+        <h2 id="uploadDiv"><u>Upload</u></h2>
+        <form id="upload" enctype="multipart/form-data" action="/upload" method="post">
+            <label>Upload file:</label>
+            <input id="uploadFile" type="file" name="file"><br><br>
+            <input type="submit" value="Upload"><br><br>
+            <button id="privateUpload">Upload(private)</button>
+        </form>
+        <br><br>
+        <hr>
 
-<h2 id="downloadDiv"><u>Download</u></h2>
-<h3 id="public">Public: </h3>
-<p id="allfile"></p>
-<form id="downloadFile" action="/download" method="get">
-    <label for="fileName">File name: </label>
-    <input id="fileName" name="param" size="30" placeholder="Enter the file name" ><br><br>
-    <input type="submit" value="Download" ></input>
+        <h2 id="downloadDiv"><u>Download</u></h2>
+        <h3 id="public">Public: </h3>
+        <p id="allfile"></p>
+        <form id="downloadFile" action="/download" method="get">
+            <label for="fileName">File name: </label>
+            <input id="fileName" name="param" size="30" placeholder="Enter the file name"><br><br>
+            <input type="submit" value="Download"></input>
 
-</form><br><br>
+        </form><br><br>
 
-<h3>Private: </h3>
-<p id="allPrivateFile"></p>
-<form id="downloadPrivateFile" action="/downloadPrivate" method="get">
-    <label for="privateFileName">File name: </label>
-    <input id="privateFileName" name="param" size="30" placeholder="Enter the file name" ><br><br>
-    <input type="submit" value="Download" ></input>
+        <h3>Private: </h3>
+        <p id="allPrivateFile"></p>
+        <form id="downloadPrivateFile" action="/downloadPrivate" method="get">
+            <label for="privateFileName">File name: </label>
+            <input id="privateFileName" name="param" size="30" placeholder="Enter the file name"><br><br>
+            <input type="submit" value="Download"></input>
 
-</form><br><br><hr>
+        </form><br><br>
+        <hr>
 
-<h2 id="proxy"><u>Download To Server</u></h2>
-<form id="downloadProxy" action="/downloadProxy" method="post">
-    <label for="downloadUrl">Url: </label>
-    <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
-    <label for="targetName">Target Name: </label>
-    <input id="targetName" name="targetName" size="30" placeholder="Enter the name of file"><br><br>
-    <input type="submit" value="Download To Server">
-</form><br>
-<hr>
+        <h2 id="proxy"><u>Download To Server</u></h2>
+        <form id="downloadProxy" action="/downloadProxy" method="post">
+            <label for="downloadUrl">Url: </label>
+            <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
+            <label for="targetName">Target Name: </label>
+            <input id="targetName" name="targetName" size="30" placeholder="Enter the name of file"><br><br>
+            <input type="submit" value="Download To Server">
+        </form><br>
+        <hr>
 
-<h2 id="deleteDiv"><u>Delete</u></h2>
-<form id="delete" action="/delete" method="post">
-    <label for="deleteName">Delete File Name:</label>
-    <input id="deleteName" name="name" size="30" placeholder="Enter the name of file you want to delete"><br><br>
-    <input type="submit" value="Delete">
-</form><br><br>
+        <h2 id="deleteDiv"><u>Delete</u></h2>
+        <form id="delete" action="/delete" method="post">
+            <label for="deleteName">Delete File Name:</label>
+            <input id="deleteName" name="name" size="30"
+                placeholder="Enter the name of file you want to delete"><br><br>
+            <input type="submit" value="Delete">
+        </form><br><br>
 
-<form action="/logout">
-<input type="submit" value="Log out" ></input>
-</form><br><br><hr>
+        <form action="/logout">
+            <input type="submit" value="Log out"></input>
+        </form><br><br>
+        <hr>
 
-</div>
+    </div>
 </body>
+
 </html>
