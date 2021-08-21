@@ -39,7 +39,7 @@
         }
 
         #preview {
-            display: none;
+            //display: none;
             top: 10%;
             position: fixed;
             left: 50%;
@@ -49,10 +49,11 @@
         }
 
         .previewMain {
-            display: none;
-            position: relative;
-            width: 80%;
-            height: 80%;
+            //display: none;
+            position: fixed;
+            left : 165px;
+            width: 70%;
+            height: 70%;
         }
 
         #previewClose {
@@ -81,7 +82,7 @@
                 });
 
                 await $.get("/clearTemp");
-                location.reload();
+                //location.reload();
                 //$('body').fadeTo('fast',1);
             });
 
