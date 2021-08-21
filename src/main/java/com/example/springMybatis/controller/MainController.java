@@ -366,13 +366,11 @@ public class MainController {
             return;
         if (isPublic) {
             File srcFile = new File("/data/files/" + fileName);
-            Resource resource = resourceLoader.getResource("classpath:static/files/"+fileName);
-            File temp = resource.getFile();
+            File temp = new File("/data/temp/"+fileName);
             FileCopyUtils.copy(srcFile,temp);
         } else {
             File srcFile = new File("/data/files/" +name+"/"+ fileName);
-            Resource resource = resourceLoader.getResource("classpath:static/files/"+fileName);
-            File temp = resource.getFile();
+            File temp = new File("/data/temp/"+fileName);
             FileCopyUtils.copy(srcFile,temp);
 
         }
