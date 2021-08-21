@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -281,7 +283,11 @@ public class MainController {
     @RequestMapping("/getAllFiles")
     @CrossOrigin(value = "*")
     @ResponseBody
-    public String[] getAllFiles() {
+    public String[] getAllFiles(@RequestParam("token")String utoken) {
+        if (utoken == null || !utoken.equals(token)) {
+            String[] t = new String[0];
+            return t;
+        }
         try{
             File folder = new File("/data/files");
             FilenameFilter filter = new FilenameFilter() {
@@ -315,7 +321,7 @@ public class MainController {
 
         UserInfo data = new UserInfo();
         data.setName(uname);
-        data.setPublicNo(getAllFiles().length);
+        data.setPublicNo(getAllFiles(token).length);
         data.setPrivateNo(getUserFiles(uname).length);
         String[] totalFiles = getUserFiles(uname);
         long totalSpace = 0;
@@ -345,6 +351,25 @@ public class MainController {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    @RequestMapping("preview")
+    public void preview(@RequestParam("fileName")String fileName,
+                        @RequestParam("token")String userToken,
+                        @RequestParam("isPublic")Boolean isPublic,
+                        @RequestParam(value = "name",required = false)String name) throws IOException {
+        if (userToken == null || !token.equals(userToken))
+            return;
+        if (isPublic) {
+            File srcFile = new File("/data/files/" + fileName);
+            File temp = new File("classpath:/static/files/"+fileName);
+            FileCopyUtils.copy(srcFile,temp);
+        } else {
+            File srcFile = new File("/data/files/" +name+"/"+ fileName);
+            File temp = new File("classpath:/static/files/"+fileName);
+            FileCopyUtils.copy(srcFile,temp);
+        }
+
     }
 
     @RequestMapping(value = "getFileInfo",method = RequestMethod.POST)

@@ -73,15 +73,22 @@
                 });
                 //$('body').fadeTo('fast',1);
             });
-            $("#popupPreview").click(()=>{
-                $("#preview").fadeIn('fast');
-            });
+
             $('#previewClose').click(()=>{
                 $("#preview").fadeOut('fast');
             });
             //below is needed, otherwise cannot set onclick to not existed elements
             $(document).on("press","#allfile span",function(event){
                 $("#popup").fadeIn('fast');
+
+                $("#popupPreview").click(()=>{
+                    $("#preview").fadeIn('fast');
+                    $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
+                    if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
+                        $("video.previewMain source").attr("src","files/"+event.target.innerText);
+                    }
+                });
+
                 console.log(event.target.innerText);
                 $.post("/getFileInfo",{isPublic : true,file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
                     console.log(data);
@@ -130,7 +137,7 @@
                 }
             });
 
-            $.get("/getAllFiles",function(data,status){
+            $.get("/getAllFiles",{token : $.cookie('token')},function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
@@ -173,8 +180,8 @@
 <div id="preview">
     <button id="previewClose">X</button>
 <!--    <img class="previewMain" src="">-->
-    <video class="previewMain" controls>
-        <source src="">
+    <video class="previewMain" title="video" controls>
+        <source src="files/">
         Your browser does not support the video tag.
     </video>
     <audio class="previewMain">
