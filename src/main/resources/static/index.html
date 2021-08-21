@@ -33,7 +33,7 @@
             color : #191970;
         }
         #preview {
-            //display : none;
+            display : none;
             top : 10%;
             position: fixed;
             left: 50%;
@@ -82,16 +82,18 @@
             $(document).on("press","#allfile span",function(event){
                 $("#popup").fadeIn('fast');
 
-                $("#popupPreview").click(()=>{
+                $("#popupPreview").click(async ()=>{
                     $("#preview").fadeIn('fast');
+
+                    await $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
+                    await document.getElementById('video').load();
+
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
                         $("video.previewMain").show();
                         $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
 
                     }
-                    $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
-                    document.getElementById('video').load();
-                    document.getElementById('video').play();
+
                 });
 
                 console.log(event.target.innerText);
