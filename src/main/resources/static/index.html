@@ -26,6 +26,7 @@
             left: 50%;
             margin-left: -10%;
             padding-bottom : 2%;
+            overflow-wrap: break-word;
 
         }
         #allfile span,#allPrivateFile span {
@@ -62,7 +63,7 @@
                 $.post("/getFileInfo",{isPublic : true,file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
                     console.log(data);
                     $("#popupName").text("File Name : "+data.fileName);
-                    $("#popupSize").text("Size : "+data.size);
+                    $("#popupSize").text("Size : "+data.size+" Bytes ("+(data.size*1.0/1024).toFixed(3)+" KB / "+(data.size*1.0/1024/1024).toFixed(3)+" MB)");
                 });
 
             });
