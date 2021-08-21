@@ -32,6 +32,26 @@
         #allfile span,#allPrivateFile span {
             color : #191970;
         }
+        #preview {
+            //display : none;
+            top : 10%;
+            position: fixed;
+            left: 50%;
+            margin-left: -40%;
+            width : 80%;
+            height : 80%;
+        }
+        .previewMain {
+            //display : none;
+            width : 80%;
+            height : 80%;
+        }
+        #previewClose {
+            position : absolute;
+            text-align : center;
+            top : 1%;
+            right : 1%;
+        }
 
     </style>
 
@@ -54,7 +74,10 @@
                 //$('body').fadeTo('fast',1);
             });
             $("#popupPreview").click(()=>{
-                alert("Preview");
+                $("#preview").fadeIn('fast');
+            });
+            $('#previewClose').click(()=>{
+                $("#preview").fadeOut('fast');
             });
             //below is needed, otherwise cannot set onclick to not existed elements
             $(document).on("press","#allfile span",function(event){
@@ -144,9 +167,20 @@
     <h4 id="popupName">File Name :</h4>
     <h4 id="popupSize">Size :</h4>
     <button id="popupClose">Close</button>&nbsp;
-    <button id="popupReview">Preview</button>
+    <button id="popupPreview">Preview</button>
 </div>
 
+<div id="preview">
+    <button id="previewClose">X</button>
+<!--    <img class="previewMain" src="">-->
+    <video class="previewMain" controls>
+        <source src="/data/files/sample.mp4">
+        Your browser does not support the video tag.
+    </video>
+    <audio class="previewMain">
+
+    </audio>
+</div>
 
 <br><br>
 <h2 id="uploadDiv"><u>Upload</u></h2>
