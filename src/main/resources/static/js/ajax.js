@@ -23,3 +23,16 @@ function upload(fileId, path) {
         alert("Please select a file.");
     }
 }
+
+function downloadToServer(isPublic){
+    var targetName = $("targetName").attr("value");
+    var url = $("#downloadUrl").attr("value");
+    $.get("/downloadProxy",{url : url,targetName : targetName,isPublic : isPublic,name : $.cookie('name')},function(data,status){
+        if (status == "success"){
+            console.log(data);
+            alert("File Downloaded");
+        }else {
+            alert("File Not Downloaded");
+        }
+    });
+}

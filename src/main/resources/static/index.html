@@ -72,7 +72,7 @@
         $(document).ready(function () {
             $("#downloadProxyPrivate").click(function(e) {
                 e.preventDefault();
-                download("")
+                downloadToServer(false);
             });
 
             $("#popupClose").click(async () => {

@@ -265,11 +265,17 @@ public class MainController {
     @ResponseBody
     public String downloadProxy(@RequestParam(value = "url") String url,
                                 @RequestParam(value = "targetName")String targetName,
+                                @RequestParam(value = "isPublic",required = false,defaultValue = "true")Boolean isPublic,
+                                @RequestParam(value = "name",required = false)String name,
                                 HttpServletRequest request) {
         if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
             System.out.println("valid token");
         else
             return "Unauthorized";
+
+        if (isPublic)
+            targetName = name + "/" + targetName;
+
 
         Runtime run = Runtime.getRuntime();
 
