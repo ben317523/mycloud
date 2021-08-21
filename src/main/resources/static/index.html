@@ -77,13 +77,13 @@
 
             $('#previewClose').click(async ()=>{
                 $("#preview").fadeOut('fast');
-                await $("#video").pause();
+                await document.getElementById("video").pause();
                 $("#video").attr("src","");
-                await $("#video").load();
+                await document.getElementById("video").load();
 
-                await $("#audio").pause();
+                await document.getElementById("audio").pause();
                 $("#audio").attr("src","");
-                await $("#audio").load();
+                await document.getElementById("audio").load();
             });
 
             //below is needed, otherwise cannot set onclick to not existed elements
