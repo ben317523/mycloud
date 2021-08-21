@@ -74,13 +74,13 @@
         $(document).ready(function () {
 
 
-            $("#popupClose").click(() => {
+            $("#popupClose").click(async () => {
                 $("#popup").fadeOut('fast', () => {
                     $("#popupName").text("File Name :");
                     $("#popupSize").text("Size :");
                 });
 
-                $.post("/clearTemp");
+                await $.get("/clearTemp");
                 location.reload();
                 //$('body').fadeTo('fast',1);
             });
