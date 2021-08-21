@@ -83,13 +83,14 @@
             });
 
             $('#previewClose').click(() => {
-                $("iframe").attr("src","");
-                $("video,audio,iframe").hide();
+                $("#other").attr("src","");
+                $("#video,#audio,#other").hide();
                 $("#preview").fadeOut('fast');
                 document.getElementById("video").pause();
 
                 document.getElementById("audio").pause();
 
+                location.reload();
 
             });
 
@@ -234,7 +235,7 @@
                 <source src="">
                 Your browser does not support the video tag.
             </video>
-            <audio id="audio" class="previewMain" style="left:45%;" controls controlsList="nodownload">
+            <audio id="audio" class="previewMain" style="left:10%;background-color:grey;" controls controlsList="nodownload">
                 <source src="">
                 Your browser does not support the audio element.
             </audio>
