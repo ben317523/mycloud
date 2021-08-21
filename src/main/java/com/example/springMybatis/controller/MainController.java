@@ -386,6 +386,8 @@ public class MainController {
         System.out.println("Clear Cache");
 
         FileUtils.deleteDirectory(new File("/data/temp"));
+        File basePath = new File("/data/temp");
+        basePath.mkdir();
 
         System.out.println("Clear Cache : after");
         return "ok";
