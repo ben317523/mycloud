@@ -103,16 +103,19 @@
 
 
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")) {
+                        $("video,audio,iframe").hide();
                         $("video.previewMain").show();
                         $("video.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
                         await document.getElementById('video').load();
 
                     } else if (event.target.innerText.endsWith(".mp3") || event.target.innerText.endsWith(".wav")) {
+                        $("video,audio,iframe").hide();
                         $("audio.previewMain").show();
                         $("audio.previewMain source").attr("src", "http://file.benlz.xyz:8081/" + event.target.innerText);
                         await document.getElementById('audio').load();
                     }
                     else {
+                        $("video,audio,iframe").hide();
                         $("#other").attr("src", "http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/" + event.target.innerText + "&embedded=true");
                         $("#other").show();
                     }
@@ -251,6 +254,7 @@
         <hr>
 
         <h2 id="downloadDiv"><u>Download</u></h2>
+        <p style="font-size:x-small">長按檔案名以獲取更多檔案信息</p>
         <h3 id="public">Public: </h3>
         <p id="allfile"></p>
         <form id="downloadFile" action="/download" method="get">
