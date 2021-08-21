@@ -1,5 +1,6 @@
 package com.example.springMybatis.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.springMybatis.entity.User;
 import com.example.springMybatis.entity.UserInfo;
 import org.springframework.core.io.InputStreamResource;
@@ -29,6 +30,13 @@ public class MainController {
     private static String token = "dsgufn-d626sfsdfJHiI-Nnfvas94832u9f-h8e9q-UGubgyuGSg-7sASYAHya-8ashOIHA-8ya8iHDT7id-hui";
 
     static {
+        String os = System.getProperty("os.name");
+        System.out.println("System os : "+os);
+        if (os.toLowerCase().matches(".*"+"linux"+".*")) {
+            File basePath = new File("/data/files");
+            if (!basePath.exists())
+                basePath.mkdirs();
+        }
         users = new User[10];
         users[0] = new User(0,"ben","89762230");
         users[1] = new User(1,"kenny","123456");
@@ -38,6 +46,10 @@ public class MainController {
         users[5] = new User(5,"breonna","123456");
     }
 
+    /**
+     *  index
+     * @return
+     */
     @RequestMapping("/")
     public String login(){
         return "login.html";
@@ -333,6 +345,38 @@ public class MainController {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    @RequestMapping(value = "getFileInfo",method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity getFileInfo(@RequestParam("file_name")String fileName,
+                                      @RequestParam("token")String userToken,
+                                      @RequestParam("isPublic")Boolean isPublic,
+                                      @RequestParam(value = "name",required = false)String name) {
+        if (userToken != null && token.equals(userToken))
+            System.out.println("valid token");
+        else
+            return ResponseEntity.status(403).body("Unauthorized");
+
+        if (isPublic){
+            File file = new File("/data/files/"+fileName);
+            if (!file.exists())
+                return ResponseEntity.status(404).body("File not found");
+
+            JSONObject object = new JSONObject();
+            object.put("fileName",file.getName());
+            object.put("size",file.length());
+            return ResponseEntity.ok(object);
+        } else {
+            File file = new File("/data/files/"+name+"/"+fileName);
+            if (!file.exists())
+                return ResponseEntity.status(404).body("File not found");
+
+            JSONObject object = new JSONObject();
+            object.put("fileName",file.getName());
+            object.put("size",file.length());
+            return ResponseEntity.ok(object);
+        }
     }
 
     @RequestMapping("/delete")

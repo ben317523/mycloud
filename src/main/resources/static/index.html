@@ -5,6 +5,8 @@
     <title>Title</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="//rawgit.com/ngryman/jquery.finger/v0.1.2/dist/jquery.finger.js"></script>
 
     <style>
         body {
@@ -14,7 +16,21 @@
         nav a {
             margin-right : 4%;
         }
+        #popup {
+            display:none;
+            border: 1px solid black;
+            background-color : #f5f5f5;
+            top : 30%;
+            width: 20%;
+            position: fixed;
+            left: 50%;
+            margin-left: -10%;
+            padding-bottom : 2%;
 
+        }
+        #allfile span,#allPrivateFile span {
+            color : #191970;
+        }
 
     </style>
 
@@ -28,6 +44,41 @@
 
         $(document).ready(function() {
 
+
+            $("#popupClose").click(()=>{
+                $("#popup").fadeOut('fast',()=>{
+                    $("#popupName").text("File Name :");
+                    $("#popupSize").text("Size :");
+                });
+                //$('body').fadeTo('fast',1);
+            });
+            $("#popupPreview").click(()=>{
+                alert("Preview");
+            });
+            //below is needed, otherwise cannot set onclick to not existed elements
+            $(document).on("press","#allfile span",function(event){
+                $("#popup").fadeIn('fast');
+                console.log(event.target.innerText);
+                $.post("/getFileInfo",{isPublic : true,file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
+                    console.log(data);
+                    $("#popupName").text("File Name : "+data.fileName);
+                    $("#popupSize").text("Size : "+data.size);
+                });
+
+            });
+
+            $(document).on("press","#allPrivateFile span",function(event){
+                $("#popup").fadeIn('fast');
+                console.log(event.target.innerText);
+                $.post("/getFileInfo",{isPublic : false,name : $.cookie('name'),file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
+                    console.log(data);
+                    $("#popupName").text("File Name : "+data.fileName);
+                    $("#popupSize").text("Size : "+data.size);
+                });
+
+            });
+
+
             $('#privateUpload').click(function(event){
                 event.preventDefault();
                 var fd = new FormData();
@@ -38,7 +89,7 @@
 
                     $.ajax({
                         type : 'POST',
-                        url : "http://100.25.139.3:8081/privateUpload?name="+getCookie('name')+"&token="+getCookie('token'),
+                        url : "/privateUpload?name="+getCookie('name')+"&token="+getCookie('token'),
                         data : fd,
                         contentType: false,
                         processData: false,
@@ -55,19 +106,19 @@
                 }
             });
 
-            $.get("http://100.25.139.3:8081/getAllFiles",function(data,status){
+            $.get("/getAllFiles",function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i];
+                  document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"<span>"+data[i]+"</span>";
                 }
             });
 
-            $.get("http://100.25.139.3:8081/getUserFiles"+"?name="+getCookie('name'),function(data,status){
+            $.get("/getUserFiles"+"?name="+getCookie('name'),function(data,status){
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                  document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i];
+                  document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"<span>"+data[i]+"</span>";
                 }
             });
         });
@@ -78,6 +129,7 @@
 
 </head>
 <body>
+<div id="main">
 <br>
 <nav>
     <a href="#uploadDiv">Upload</a>
@@ -86,6 +138,13 @@
     <a href="#deleteDiv">Delete</a>
     <a href="console.html">Console</a>
 </nav>
+
+<div id="popup">
+    <h4 id="popupName">File Name :</h4>
+    <h4 id="popupSize">Size :</h4>
+    <button id="popupClose">Close</button>&nbsp;
+    <button id="popupReview">Preview</button>
+</div>
 
 
 <br><br>
@@ -137,5 +196,7 @@
 <form action="/logout">
 <input type="submit" value="Log out" ></input>
 </form><br><br><hr>
+
+</div>
 </body>
 </html>
