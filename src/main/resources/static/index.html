@@ -83,7 +83,7 @@
             });
 
             $('#previewClose').click(() => {
-                $("video,audio").hide();
+                $("video,audio,iframe").hide();
                 $("#preview").fadeOut('fast');
                 document.getElementById("video").pause();
 
@@ -230,12 +230,12 @@
                 <source src="">
                 Your browser does not support the video tag.
             </video>
-            <audio id="audio" class="previewMain" controls controlsList="nodownload">
+            <audio id="audio" class="previewMain" style="left:45%;" controls controlsList="nodownload">
                 <source src="">
                 Your browser does not support the audio element.
             </audio>
             <iframe id="other" class="previewMain"
-                src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650"
+                src="http://docs.google.com/viewer?url=&embedded=true" width="650"
                 height="780" style="border: none;"></iframe>
         </div>
 
