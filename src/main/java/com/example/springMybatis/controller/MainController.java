@@ -381,6 +381,7 @@ public class MainController {
     @RequestMapping("/clearTemp")
     @ResponseBody
     public String clearTemp(){
+        System.out.println("Clear Cache");
         Runtime run = Runtime.getRuntime();
 
         Process p = null;
