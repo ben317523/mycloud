@@ -87,9 +87,11 @@
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
                         $("video.previewMain").show();
                         $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
+
                     }
                     $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
-
+                    document.getElementById('video').load();
+                    document.getElementById('video').play();
                 });
 
                 console.log(event.target.innerText);
@@ -183,14 +185,14 @@
 <div id="preview">
     <button id="previewClose">X</button>
 <!--    <img class="previewMain" src="">-->
-    <video class="previewMain" title="video" controls controlsList="nodownload">
+    <video id="video" class="previewMain" title="video" controls controlsList="nodownload">
         <source src="">
         Your browser does not support the video tag.
     </video>
-    <audio class="previewMain">
+    <audio id="audio" class="previewMain">
         <source src="">
     </audio>
-    <iframe class="previewMain" src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650" height="780" style="border: none;"></iframe>
+    <iframe id="other" class="previewMain" src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650" height="780" style="border: none;"></iframe>
 </div>
 
 <br><br>
