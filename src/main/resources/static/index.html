@@ -73,7 +73,7 @@
                 $.post("/getFileInfo",{isPublic : false,name : $.cookie('name'),file_name : event.target.innerText,token : $.cookie('token')}, function(data,status){
                     console.log(data);
                     $("#popupName").text("File Name : "+data.fileName);
-                    $("#popupSize").text("Size : "+data.size);
+                    $("#popupSize").text("Size : "+data.size+" Bytes ("+(data.size*1.0/1024).toFixed(3)+" KB / "+(data.size*1.0/1024/1024).toFixed(3)+" MB)");
                 });
 
             });

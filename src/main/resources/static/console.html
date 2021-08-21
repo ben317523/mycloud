@@ -30,7 +30,7 @@
         $("#userName").text($("#userName").text()+" "+data.name);
         $("#public").text($("#public").text()+" "+data.publicNo);
         $("#private").text($("#private").text()+" "+data.privateNo);
-        $("#space").text($("#space").text()+" "+data.spaceUsed.toFixed(2)+" KB"+"("+(data.spaceUsed*1.0/1024).toFixed(2)+" MB)");
+        $("#space").text($("#space").text()+" "+data.spaceUsed.toFixed(3)+" KB"+" ("+(data.spaceUsed*1.0/1024).toFixed(3)+" MB)");
       });
     });
   </script>
