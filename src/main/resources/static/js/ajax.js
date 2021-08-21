@@ -25,8 +25,8 @@ function upload(fileId, path) {
 }
 
 function downloadToServer(isPublic){
-    var targetName = $("targetName").attr("value");
-    var url = $("#downloadUrl").attr("value");
+    var targetName = $("#targetName").prop("value");
+    var url = $("#downloadUrl").prop("value");
     $.get("/downloadProxy",{url : url,targetName : targetName,isPublic : isPublic,name : $.cookie('name')},function(data,status){
         if (status == "success"){
             console.log(data);
