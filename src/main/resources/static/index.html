@@ -75,6 +75,11 @@
                 downloadToServer(false);
             });
 
+            $("#deletePrivate").click(function(e){
+                e.preventDefault();
+                deleteFile(false);
+            });
+
             $("#popupClose").click(async () => {
                 $("#popup").fadeOut('fast', () => {
                     $("#popupName").text("File Name :");
@@ -286,7 +291,8 @@
             <label for="deleteName">Delete File Name:</label>
             <input id="deleteName" name="name" size="30"
                 placeholder="Enter the name of file you want to delete"><br><br>
-            <input type="submit" value="Delete">
+            <input type="submit" value="Delete Public File">&nbsp;
+            <button id="deletePrivate" type="submit">Delete Private File</button>
         </form><br><br>
 
         <form action="/logout">

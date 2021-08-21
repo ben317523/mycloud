@@ -436,6 +436,7 @@ public class MainController {
     @ResponseBody
     public String delete(@RequestParam("name")String name,
                          @CookieValue("name")String cname,
+                         @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
                          HttpServletRequest request) {
         if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
             System.out.println("valid token");
@@ -443,15 +444,23 @@ public class MainController {
             return "Unauthorized";
 
         try {
-            String[] lists = name.split("/");
-            if (lists.length > 1 && !lists[0].equals(cname))
-                return "Not Allowed. This file does not belong to you";
+            if (isPublic) {
+                String[] lists = name.split("/");
+                if (lists.length > 1 && !lists[0].equals(cname))
+                    return "Not Allowed. This file does not belong to you";
 
-            File deletedFile = new File("/data/files/"+name);
-            if (!deletedFile.exists())
-                return "File not found!";
-            deletedFile.delete();
-            return "File : "+name+" deleted!";
+                File deletedFile = new File("/data/files/" + name);
+                if (!deletedFile.exists())
+                    return "File not found!";
+                deletedFile.delete();
+                return "File : " + name + " deleted!";
+            } else {
+                File deletedFile = new File("/data/files/" +cname +"/" + name);
+                if (!deletedFile.exists())
+                    return "File not found!";
+                deletedFile.delete();
+                return "File : " + name + " deleted!";
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return "File not found!";

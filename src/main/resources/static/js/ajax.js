@@ -36,3 +36,15 @@ function downloadToServer(isPublic){
         }
     });
 }
+
+function deleteFile(isPublic) {
+    var deleteName = $("#deleteName").prop("value");
+    $.post("/delete",{name : deleteName},function(data,status){
+        if (status == "success"){
+            console.log(data);
+            alert("File Deleted");
+        }else {
+            alert("File Not Deleted");
+        }
+    });
+}
