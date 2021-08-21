@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//rawgit.com/ngryman/jquery.finger/v0.1.2/dist/jquery.finger.js"></script>
+    <script src="js/ajax.js"></script>
 
     <style>
         body {
@@ -51,7 +52,7 @@
         .previewMain {
             display: none;
             position: fixed;
-            left : 165px;
+            left : 175px;
             width: 70%;
             height: 70%;
         }
@@ -66,14 +67,13 @@
 
     <script>
 
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
+
 
         $(document).ready(function () {
-
+            $("#downloadProxyPrivate").click(function(e) {
+                e.preventDefault();
+                download("")
+            });
 
             $("#popupClose").click(async () => {
                 $("#popup").fadeOut('fast', () => {
@@ -82,7 +82,7 @@
                 });
 
                 await $.get("/clearTemp");
-                //location.reload();
+                setTimeout(()=>{location.reload()},1000);
                 //$('body').fadeTo('fast',1);
             });
 
@@ -177,44 +177,23 @@
 
             $('#privateUpload').click(function (event) {
                 event.preventDefault();
-                var fd = new FormData();
-                var files = $('#uploadFile')[0].files;
+                upload("uploadFile","privateUpload");
 
-                if (files.length > 0) {
-                    fd.append('file', files[0]);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: "/privateUpload?name=" + getCookie('name') + "&token=" + getCookie('token'),
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            if (response != 0) {
-                                alert('file uploaded');
-                            } else {
-                                alert('file not uploaded');
-                            }
-                        },
-                    });
-                } else {
-                    alert("Please select a file.");
-                }
             });
 
             $.get("/getAllFiles", { token: $.cookie('token') }, function (data, status) {
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                    document.getElementById("allfile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<span>" + data[i] + "</span>";
+                    document.getElementById("allfile").innerHTML +=  "<span>" + data[i] + "</span>" + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             });
 
-            $.get("/getUserFiles" + "?name=" + getCookie('name'), function (data, status) {
+            $.get("/getUserFiles" + "?name=" + $.cookie('name'), function (data, status) {
                 console.log(data);
                 for (let i = 0; i < data.length; i++) {
 
-                    document.getElementById("allPrivateFile").innerHTML += " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "<span>" + data[i] + "</span>";
+                    document.getElementById("allPrivateFile").innerHTML +=  "<span>" + data[i] + "</span>" + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             });
         });
@@ -297,7 +276,8 @@
             <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
             <label for="targetName">Target Name: </label>
             <input id="targetName" name="targetName" size="30" placeholder="Enter the name of file"><br><br>
-            <input type="submit" value="Download To Server">
+            <input type="submit" value="Download To Server">&nbsp;
+            <button id="downloadProxyPrivate" type="submit" >Private Download</button>
         </form><br>
         <hr>
 
