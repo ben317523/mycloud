@@ -79,11 +79,11 @@
                 $("#preview").fadeOut('fast');
                 await document.getElementById("video").pause();
                 $("#video").attr("src","");
-                await document.getElementById("video").load();
+
 
                 await document.getElementById("audio").pause();
                 $("#audio").attr("src","");
-                await document.getElementById("audio").load();
+
             });
 
             //below is needed, otherwise cannot set onclick to not existed elements
