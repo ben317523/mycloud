@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -382,18 +383,8 @@ public class MainController {
     @ResponseBody
     public String clearTemp(){
         System.out.println("Clear Cache");
-        Runtime run = Runtime.getRuntime();
 
-        Process p = null;
-        String cmd = "sudo rm /data/temp/*.*";
-        try {
-            p = run.exec(cmd);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERROR.RUNNING.CMD");
-            return "not ok";
-        }
+        FileSystemUtils.deleteRecursively(new File("/data/temp"));
         return "ok";
     }
 
