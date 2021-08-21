@@ -273,7 +273,7 @@ public class MainController {
         else
             return "Unauthorized";
 
-        if (isPublic)
+        if (!isPublic)
             targetName = name + "/" + targetName;
 
 
