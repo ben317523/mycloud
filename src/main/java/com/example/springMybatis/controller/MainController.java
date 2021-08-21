@@ -362,13 +362,13 @@ public class MainController {
             return;
         if (isPublic) {
             File srcFile = new File("/data/files/" + fileName);
-            File temp = new File("files/"+fileName);
-            temp.createNewFile();
+            File temp = new File("static/files/"+fileName);
             FileCopyUtils.copy(srcFile,temp);
         } else {
             File srcFile = new File("/data/files/" +name+"/"+ fileName);
-            File temp = new File("files/"+fileName);
+            File temp = new File("static/files/"+fileName);
             FileCopyUtils.copy(srcFile,temp);
+
         }
 
     }

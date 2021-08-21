@@ -83,10 +83,11 @@
 
                 $("#popupPreview").click(()=>{
                     $("#preview").fadeIn('fast');
-                    $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
                         $("video.previewMain source").attr("src","files/"+event.target.innerText);
                     }
+                    $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
+
                 });
 
                 console.log(event.target.innerText);
