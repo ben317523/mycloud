@@ -105,6 +105,7 @@
                         await document.getElementById('audio').load();
                     }
                     else {
+                        $("#other").attr("src","http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/"+event.target.innerText+"&embedded=true");
                         $("#other").show();
                     }
 
@@ -220,8 +221,9 @@
         <source src="">
         Your browser does not support the video tag.
     </video>
-    <audio id="audio" class="previewMain">
+    <audio id="audio" class="previewMain" controls controlsList="nodownload">
         <source src="">
+        Your browser does not support the audio element.
     </audio>
     <iframe id="other" class="previewMain" src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650" height="780" style="border: none;"></iframe>
 </div>
