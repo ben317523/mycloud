@@ -3,8 +3,10 @@ package com.example.springMybatis.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.springMybatis.entity.User;
 import com.example.springMybatis.entity.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import java.util.regex.Pattern;
 
 @Controller
 public class MainController {
+    @Autowired
+    private ResourceLoader resourceLoader;
     //@Autowired
     //private UserMapper userMapper;
     private static User[] users;
@@ -362,11 +366,13 @@ public class MainController {
             return;
         if (isPublic) {
             File srcFile = new File("/data/files/" + fileName);
-            File temp = new File("static/files/"+fileName);
+            Resource resource = resourceLoader.getResource("classpath:static/files/"+fileName);
+            File temp = resource.getFile();
             FileCopyUtils.copy(srcFile,temp);
         } else {
             File srcFile = new File("/data/files/" +name+"/"+ fileName);
-            File temp = new File("static/files/"+fileName);
+            Resource resource = resourceLoader.getResource("classpath:static/files/"+fileName);
+            File temp = resource.getFile();
             FileCopyUtils.copy(srcFile,temp);
 
         }
