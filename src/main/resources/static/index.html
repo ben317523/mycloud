@@ -33,7 +33,7 @@
             color : #191970;
         }
         #preview {
-            display : none;
+            //display : none;
             top : 10%;
             position: fixed;
             left: 50%;
@@ -43,6 +43,7 @@
         }
         .previewMain {
             display : none;
+            position : relative;
             width : 80%;
             height : 80%;
         }
@@ -84,7 +85,7 @@
                 $("#popupPreview").click(()=>{
                     $("#preview").fadeIn('fast');
                     if (event.target.innerText.endsWith(".mp4") || event.target.innerText.endsWith(".ogg")){
-                        $("video.previewMain source").attr("src",event.target.innerText);
+                        $("video.previewMain source").attr("src","http://file.benlz.xyz:8081/"+event.target.innerText);
                     }
                     $.post("/preview",{fileName : event.target.innerText,token : $.cookie('token'),isPublic : true});
 
@@ -181,13 +182,14 @@
 <div id="preview">
     <button id="previewClose">X</button>
 <!--    <img class="previewMain" src="">-->
-    <video class="previewMain" title="video" controls>
-        <source src="files/">
+    <video class="previewMain" title="video" controls controlsList="nodownload">
+        <source src="">
         Your browser does not support the video tag.
     </video>
     <audio class="previewMain">
-
+        <source src="">
     </audio>
+    <iframe class="previewMain" src="http://docs.google.com/viewer?url=http://file.benlz.xyz:8081/sample.mp4&embedded=true" width="650" height="780" style="border: none;"></iframe>
 </div>
 
 <br><br>
