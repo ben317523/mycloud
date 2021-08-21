@@ -48,3 +48,15 @@ function deleteFile(isPublic) {
         }
     });
 }
+
+function makePublic() {
+    var privateFileName = $("#privateFileName").prop("value");
+    $.post("/makePublic",{privateFileName : privateFileName},function(data,status){
+        if (status == "success"){
+            console.log(data);
+            alert("File Become Public");
+        }else {
+            alert("Some Error");
+        }
+    });
+}

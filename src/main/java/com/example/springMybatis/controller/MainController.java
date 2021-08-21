@@ -431,6 +431,26 @@ public class MainController {
         }
     }
 
+
+    @RequestMapping("/makePublic")
+    @ResponseBody
+    public ResponseEntity makePublic(@RequestParam("privateFileName")String privateFileName,
+                             @CookieValue("token")String userToken,
+                             @CookieValue("name")String name) throws IOException {
+        if (userToken != null && token.equals(userToken))
+            System.out.println("valid token");
+        else
+            return ResponseEntity.status(403).body("Unauthorized");
+
+        File src = new File("/data/files/"+name+"/"+privateFileName);
+        if (!src.exists())
+            return ResponseEntity.status(404).body("File not exits");
+        File target = new File("/data/files/"+privateFileName);
+        FileCopyUtils.copy(src, target);
+        return ResponseEntity.ok("File already make public");
+    }
+
+
     @RequestMapping("/delete")
     @CrossOrigin(value = "*")
     @ResponseBody
