@@ -3,6 +3,7 @@ package com.example.springMybatis.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.springMybatis.entity.User;
 import com.example.springMybatis.entity.UserInfo;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -381,11 +382,12 @@ public class MainController {
 
     @RequestMapping("/clearTemp")
     @ResponseBody
-    public String clearTemp(){
+    public String clearTemp() throws IOException {
         System.out.println("Clear Cache");
 
-        boolean result = FileSystemUtils.deleteRecursively(new File("/data/temp"));
-        System.out.println("Clear Cache : "+result);
+        FileUtils.deleteDirectory(new File("/data/temp"));
+
+        System.out.println("Clear Cache : after");
         return "ok";
     }
 
