@@ -193,7 +193,7 @@ public class MainController {
                 @Override
                 public boolean accept(File f, String name) {
                     Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(name.replaceAll("[\\(\\)]","*"));
+                    Matcher matcher = pattern.matcher(name.replaceAll("[()]+","."));
                     return matcher.find();
                 }
             };
@@ -238,7 +238,7 @@ public class MainController {
                 @Override
                 public boolean accept(File f, String name) {
                     Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(name.replaceAll("[\\(\\)]","*"));
+                    Matcher matcher = pattern.matcher(name.replaceAll("[()]+","."));
                     return matcher.find();
                 }
             };
