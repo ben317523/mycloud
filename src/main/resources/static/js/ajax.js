@@ -59,7 +59,7 @@ function deleteFile(isPublic) {
     });
 }
 
-function makePublic() {
+async function makePublic() {
     var privateFileName = $("#privateFileName").prop("value");
     $.post("/makePublic",{privateFileName : privateFileName},function(data,status){
         if (status == "success"){
