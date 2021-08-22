@@ -192,8 +192,8 @@ public class MainController {
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
-                    Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(name.replaceAll("[\\(\\)]+","."));
+                    Pattern pattern = Pattern.compile(".*"+param.replaceAll("[\\(\\)]+",".")+".*",Pattern.CASE_INSENSITIVE);
+                    Matcher matcher = pattern.matcher(name);
                     return matcher.find();
                 }
             };
@@ -238,7 +238,7 @@ public class MainController {
                 @Override
                 public boolean accept(File f, String name) {
                     Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(name.replaceAll("[\\(\\)]+","."));
+                    Matcher matcher = pattern.matcher(name);
                     return matcher.find();
                 }
             };
