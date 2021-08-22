@@ -19,7 +19,9 @@
             $("#guestLogin").click(function(event){
                 event.preventDefault();
                 console.log("guest login")
-                $.post("login",{name : "guest",password : "123456"});
+                $.post("login",{name : "guest",password : "123456"},function(data,status){
+                    location.assign(data);
+                },dataType : 'html');
             });
         });
     </script>
