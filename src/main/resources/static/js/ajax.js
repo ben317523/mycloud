@@ -74,7 +74,7 @@ function download(fileName, isPublic) {
 //        }
 //    });
     var postData = {
-        param:filename,
+        param:fileName,
         isPublic:isPublic
     };
     var fakeFormHtmlFragment = "<form style='display: none;' method='GET' action='"+"/download"+"'>";
