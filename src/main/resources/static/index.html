@@ -67,14 +67,16 @@
 
     <script>
 
-
-
         $(document).ready(function () {
             $("#privateFileMakePublic").click(function(e){
                 e.preventDefault();
                 makePublic();
             });
 
+            $("#downloadProxyPublic").click(function(e) {
+                e.preventDefault();
+                downloadToServer(true);
+            });
             $("#downloadProxyPrivate").click(function(e) {
                 e.preventDefault();
                 downloadToServer(false);
@@ -286,7 +288,7 @@
             <input id="downloadUrl" name="url" size="30" placeholder="Enter the file url"><br><br>
             <label for="targetName">Target Name: </label>
             <input id="targetName" name="targetName" size="30" placeholder="Enter the name of file"><br><br>
-            <input type="submit" value="Download To Server">&nbsp;
+            <input id="downloadProxyPublic" type="submit" value="Download To Server">&nbsp;
             <button id="downloadProxyPrivate" type="submit" >Private Download</button>
         </form><br>
         <hr>
