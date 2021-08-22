@@ -1,12 +1,13 @@
 function upload(fileId, path, isPublic) {
-    $("#main").fadeTo('fast', 0.25);
-    $("#loading").show();
+
     var fd = new FormData();
     var files = $('#' + fileId)[0].files;
 
     if (files.length > 0) {
-        fd.append('file', files[0]);
+        $("#main").fadeTo('fast', 0.25);
+        $("#loading").show();
 
+        fd.append('file', files[0]);
 
         $.ajax({
             type: 'POST',

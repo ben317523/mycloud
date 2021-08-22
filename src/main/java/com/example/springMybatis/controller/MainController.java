@@ -476,13 +476,13 @@ public class MainController {
                 if (lists.length > 1 && !lists[0].equals(cname))
                     return "Not Allowed. This file does not belong to you";
 
-                File deletedFile = new File("/data/files/" + name);
+                File deletedFile = new File("/data/files/" + name.trim());
                 if (!deletedFile.exists())
                     return "File not found!";
                 deletedFile.delete();
                 return "File : " + name + " deleted!";
             } else {
-                File deletedFile = new File("/data/files/" +cname +"/" + name);
+                File deletedFile = new File("/data/files/" +cname +"/" + name.trim());
                 if (!deletedFile.exists())
                     return "File not found!";
                 deletedFile.delete();

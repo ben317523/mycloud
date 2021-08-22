@@ -9,10 +9,18 @@
             text-align: center;
         }
         a, a:visited, a:hover, a:active {
-  color: inherit;
-}
+          color: inherit;
+        }
 
     </style>
+    <script>
+        $(document).ready(function(){
+            $("#guestLogin").click(function(event){
+                event.preventDefault();
+                $.post("login",{name : "guest",password : "123456"});
+            });
+        });
+    </script>
 </head>
 <body>
 <h1>Login:</h1>
@@ -22,8 +30,8 @@
   <input id="name" name="name" type="text" placeholder="Enter your name"> <br><br>
   <label for="password">Password:</label>
   <input id="password" name="password" type="password" placeholder="Enter your password"><br><br>
-
-  <input id="submit" type="submit" value="login">
+  <input id="submit" type="submit" value="Login">
+    <button id="guestLogin" type="submit">Guest</button>
 </form><br><br>
 
 <a href="changePass.html">Change Password</a>
