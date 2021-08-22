@@ -1,9 +1,10 @@
-function upload(fileId, path) {
+function upload(fileId, path, isPublic) {
     var fd = new FormData();
     var files = $('#'+fileId)[0].files;
 
     if (files.length > 0) {
         fd.append('file', files[0]);
+        $("#loading").show();
 
         $.ajax({
             type: 'POST',
@@ -12,6 +13,7 @@ function upload(fileId, path) {
             contentType: false,
             processData: false,
             success: function (response) {
+                $("#loading").hide();
                 if (response != 0) {
                     alert('file uploaded');
                 } else {
@@ -22,6 +24,10 @@ function upload(fileId, path) {
     } else {
         alert("Please select a file.");
     }
+}
+
+function download(isPublic) {
+
 }
 
 function downloadToServer(isPublic){

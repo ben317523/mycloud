@@ -20,6 +20,14 @@
             margin-right: 4%;
         }
 
+        #loading {
+            display : none;
+            position : fixed;
+            top : 5%;
+            margin-left : -16%;
+            width : 30%;
+        }
+
         #popup {
             display: none;
             border: 1px solid black;
@@ -218,6 +226,8 @@
 
 <body>
     <div id="main">
+
+        <img id="loading" src="img/loadingGif.gif">
         <br>
         <nav>
             <a href="#uploadDiv">Upload</a>
@@ -231,6 +241,7 @@
             <h4 id="popupName">File Name :</h4>
             <h4 id="popupSize">Size :</h4>
             <button id="popupPreview">Preview</button>&nbsp;
+            <button id="popupDownload">Download</button>&nbsp;
             <button id="popupClose">Close</button>
         </div>
 
