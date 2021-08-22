@@ -73,16 +73,17 @@ function download(fileName, isPublic) {
 //            }
 //        }
 //    });
-    var postData = {
-        param:fileName,
-        isPublic:isPublic
-    };
+//    var postData = {
+//        param:fileName,
+//        isPublic:isPublic
+//    };
     var fakeFormHtmlFragment = "<form style='display: none;' method='GET' action='"+"/download"+"'>";
-    _.each(postData, function(postValue, postKey){
-        var escapedKey = postKey.replace("\\", "\\\\").replace("'", "\'");
-        var escapedValue = postValue.replace("\\", "\\\\").replace("'", "\'");
-        fakeFormHtmlFragment += "<input type='hidden' name='"+escapedKey+"' value='"+escapedValue+"'>";
-    });
+
+//    var escapedKey = postData.param.replace("\\", "\\\\").replace("'", "\'");
+//    var escapedValue = postValue.replace("\\", "\\\\").replace("'", "\'");
+    fakeFormHtmlFragment += "<input type='hidden' name='"+"param"+"' value='"+fileName+"'>";
+    fakeFormHtmlFragment += "<input type='hidden' name='"+"isPublic"+"' value='"+isPublic+"'>";
+
     fakeFormHtmlFragment += "</form>";
     $fakeFormDom = $(fakeFormHtmlFragment);
     $("body").append($fakeFormDom);
