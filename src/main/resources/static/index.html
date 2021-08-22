@@ -79,7 +79,7 @@
             $("#privateFileMakePublic").click(async function(e){
                 e.preventDefault();
                 await makePublic();
-                location.reload();
+                await location.reload();
             });
 
             $("#downloadProxyPublic").click(function(e) {
