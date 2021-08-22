@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -132,7 +131,7 @@ public class MainController {
         else
             return "Unauthorized";
 
-        File convertFile = new File("/data/files/"+file.getOriginalFilename());
+        File convertFile = new File("/data/files/"+file.getOriginalFilename().replaceAll("[\\s\\[\\]{}]+",""));
         FileOutputStream fout = new FileOutputStream(convertFile);
         BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
         byte[] buffer = new byte[2048];
@@ -159,7 +158,7 @@ public class MainController {
         if (!userPath.exists())
             userPath.mkdir();
 
-        File convertFile = new File("/data/files/"+name+"/"+file.getOriginalFilename());
+        File convertFile = new File("/data/files/"+name+"/"+file.getOriginalFilename().replaceAll("[\\s\\[\\]{}]+",""));
         FileOutputStream fout = new FileOutputStream(convertFile);
         BufferedInputStream fin = new BufferedInputStream(file.getInputStream());
         byte[] buffer = new byte[2048];
