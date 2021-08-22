@@ -107,9 +107,11 @@ function makePublic() {
         if (status == "success"){
             console.log(data);
             alert("File Become Public");
+            location.reload();
         }else {
             alert("Some Error");
+            location.reload();
         }
-        location.reload();
+
     });
 }

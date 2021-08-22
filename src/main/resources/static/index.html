@@ -79,7 +79,7 @@
             $("#privateFileMakePublic").click(async function(e){
                 e.preventDefault();
                 await makePublic();
-                await location.reload();
+
             });
 
             $("#downloadProxyPublic").click(function(e) {
@@ -103,7 +103,7 @@
                 });
 
                 await $.get("/clearTemp");
-                setTimeout(()=>{location.reload()},1000);
+                location.reload();
                 //$('body').fadeTo('fast',1);
             });
 
