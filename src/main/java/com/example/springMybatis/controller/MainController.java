@@ -237,7 +237,7 @@ public class MainController {
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
-                    Pattern pattern = Pattern.compile(".*"+param+".*",Pattern.CASE_INSENSITIVE);
+                    Pattern pattern = Pattern.compile(".*"+param.replaceAll("[\\(\\)]+",".")+".*",Pattern.CASE_INSENSITIVE);
                     Matcher matcher = pattern.matcher(name);
                     return matcher.find();
                 }
