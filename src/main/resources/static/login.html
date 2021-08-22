@@ -20,7 +20,7 @@
                 event.preventDefault();
                 console.log("guest login")
                 $.post("login",{name : "guest",password : "123456"},function(data,status){
-                    document.write(data);
+                    $('html').html(data);
                 },'html');
             });
         });
