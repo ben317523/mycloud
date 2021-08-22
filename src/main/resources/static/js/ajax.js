@@ -31,7 +31,7 @@ function upload(fileId, path, isPublic) {
 
 function download(fileName,isPublic) {
     //var fileName = $("#fileName").prop("value");
-    $.post("/download",{param : fileName,isPublic : isPublic});
+    $.get("/download",{param : fileName,isPublic : isPublic});
 }
 
 function downloadToServer(isPublic){

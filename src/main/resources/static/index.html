@@ -75,10 +75,11 @@
 
     <script>
 
-        $(document).ready(function () {
+        $(document).ready(async function () {
             $("#privateFileMakePublic").click(function(e){
                 e.preventDefault();
-                makePublic();
+                await makePublic();
+                location.reload();
             });
 
             $("#downloadProxyPublic").click(function(e) {

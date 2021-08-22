@@ -199,7 +199,7 @@ public class MainController {
                 }
             };
             String[] searchedName = folder.list(filter);
-            File file = new File("/data/files/"+((searchedName.length!=0)?searchedName[0]:"") );
+            File file = new File("/data/files/"+(isPublic?"":(name+"/"))+((searchedName.length!=0)?searchedName[0]:"") );
 
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
