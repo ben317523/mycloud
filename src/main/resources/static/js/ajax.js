@@ -35,6 +35,7 @@ function DownloadFile(fileName) {
             var url = "/download" ;
 
             $.ajax({
+                type : 'GET',
                 url: url,
                 data : {param : fileName,isPublic : isPublic},
                 cache: false,
@@ -100,7 +101,7 @@ function deleteFile(isPublic) {
     });
 }
 
-async function makePublic() {
+function makePublic() {
     var privateFileName = $("#privateFileName").prop("value");
     $.post("/makePublic",{privateFileName : privateFileName},function(data,status){
         if (status == "success"){
@@ -109,5 +110,6 @@ async function makePublic() {
         }else {
             alert("Some Error");
         }
+        location.reload();
     });
 }
