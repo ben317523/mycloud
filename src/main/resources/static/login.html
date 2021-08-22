@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
         body {
             margin : 0 auto;
@@ -17,6 +18,7 @@
         $(document).ready(function(){
             $("#guestLogin").click(function(event){
                 event.preventDefault();
+                console.log("guest login")
                 $.post("login",{name : "guest",password : "123456"});
             });
         });
