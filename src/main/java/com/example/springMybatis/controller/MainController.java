@@ -173,7 +173,10 @@ public class MainController {
     }
 
     @RequestMapping(value = "/download")
-    public ResponseEntity download(@RequestParam("param") String param, HttpServletRequest request) throws IOException {
+    public ResponseEntity download(@RequestParam("param") String param,
+                                   @RequestParam(value = "isPublic",required = false,defaultValue = "true")Boolean isPublic,
+                                   @CookieValue(value = "name",required = false) String name,
+                                   HttpServletRequest request) throws IOException {
         if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
             System.out.println("valid token");
         else
@@ -181,7 +184,12 @@ public class MainController {
 
 
         try {
-            File folder = new File("/data/files");
+            File folder = null;
+            if (!isPublic){
+                folder = new File("/data/files/"+name);
+            } else {
+                folder = new File("/data/files");
+            }
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {

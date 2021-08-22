@@ -1,10 +1,12 @@
 function upload(fileId, path, isPublic) {
+    $("#main").fadeTo('fast',0.25);
+    $("#loading").show();
     var fd = new FormData();
     var files = $('#'+fileId)[0].files;
 
     if (files.length > 0) {
         fd.append('file', files[0]);
-        $("#loading").show();
+
 
         $.ajax({
             type: 'POST',
@@ -14,6 +16,7 @@ function upload(fileId, path, isPublic) {
             processData: false,
             success: function (response) {
                 $("#loading").hide();
+                $("#main").fadeTo('fast',1);
                 if (response != 0) {
                     alert('file uploaded');
                 } else {
@@ -26,8 +29,9 @@ function upload(fileId, path, isPublic) {
     }
 }
 
-function download(isPublic) {
-
+function download(fileName,isPublic) {
+    //var fileName = $("#fileName").prop("value");
+    $.post("/download",{param : fileName,isPublic : isPublic});
 }
 
 function downloadToServer(isPublic){

@@ -120,6 +120,11 @@
 
             //below is needed, otherwise cannot set onclick to not existed elements
             $(document).on("press", "#allfile span", function (event) {
+                $("#popupDownload").click(function(e){
+                    e.preventDefault();
+                    download(event.target.innerText,true);
+                });
+
                 $("#popup").fadeIn('fast');
 
                 $("#popupPreview").click(async () => {
@@ -158,6 +163,11 @@
             });
 
             $(document).on("press", "#allPrivateFile span", function (event) {
+                $("#popupDownload").click(function(e){
+                    e.preventDefault();
+                    download(event.target.innerText,false);
+                });
+
                 $("#popup").fadeIn('fast');
 
                 $("#popupPreview").click(async () => {
@@ -225,9 +235,10 @@
 </head>
 
 <body>
+    <img id="loading" src="img/loadingGif.gif">
     <div id="main">
 
-        <img id="loading" src="img/loadingGif.gif">
+
         <br>
         <nav>
             <a href="#uploadDiv">Upload</a>
