@@ -101,6 +101,7 @@ function downloadToServer(isPublic) {
         } else {
             alert("File Not Downloaded");
         }
+        location.reload();
     });
 }
 
@@ -113,6 +114,7 @@ function deleteFile(isPublic) {
         } else {
             alert("File Not Deleted");
         }
+        location.reload();
     });
 }
 

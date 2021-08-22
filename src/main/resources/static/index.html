@@ -205,10 +205,15 @@
 
             });
 
+            $("#publicUpload").click(function (event){
+                event.preventDefault();
+                upload("uploadFile","download",false);
+            });
+
 
             $('#privateUpload').click(function (event) {
                 event.preventDefault();
-                upload("uploadFile","privateUpload");
+                upload("uploadFile","privateUpload",false);
 
             });
 
@@ -278,8 +283,8 @@
         <form id="upload" enctype="multipart/form-data" action="/upload" method="post">
             <label>Upload file:</label>
             <input id="uploadFile" type="file" name="file"><br><br>
-            <input type="submit" value="Upload"><br><br>
-            <button id="privateUpload">Upload(private)</button>
+            <input id="publicUpload" type="submit" value="Upload (public)"><br><br>
+            <button id="privateUpload">Upload (private)</button>
         </form>
         <br><br>
         <hr>
