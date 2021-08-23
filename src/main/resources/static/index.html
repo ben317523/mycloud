@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//rawgit.com/ngryman/jquery.finger/v0.1.2/dist/jquery.finger.js"></script>
@@ -16,8 +20,26 @@
             text-align: center;
         }
 
+        #main {
+            position:relative;
+            top : 70px;
+        }
+
+        nav {
+            display : flex ;
+            position : fixed;
+            background-color : #979797;
+            height : 60px;
+            width: 100%;
+            justify-content : center;
+            align-items : center;
+            margin-top : 0px;
+            z-index: 10;
+        }
+
         nav a {
             margin-right: 4%;
+            color : white;
         }
 
         #loading {
@@ -75,7 +97,15 @@
 
     <script>
 
+
+
         $(document).ready(function () {
+            $('input[type="submit"],button').addClass("btn btn-primary");
+
+            $("#logoutLink").click(function(){
+                document.getElementById("logoutForm").submit();
+            });
+
             $("#privateFileMakePublic").click(async function(e){
                 e.preventDefault();
                 await makePublic();
@@ -242,23 +272,23 @@
 
 <body>
     <img id="loading" src="img/loadingGif.gif">
-    <div id="main">
 
 
-        <br>
-        <nav>
+        <nav  >
             <a href="#uploadDiv">Upload</a>
             <a href="#downloadDiv">Download</a>
             <a href="#proxy">Download To Server</a>
             <a href="#deleteDiv">Delete</a>
             <a href="console.html">Console</a>
+            <a id="logoutLink" href="#logoutForm">Log Out</a>
         </nav>
 
+    <div id="main">
         <div id="popup">
             <h4 id="popupName">File Name :</h4>
             <h4 id="popupSize">Size :</h4>
-            <button id="popupPreview">Preview</button>&nbsp;
-            <button id="popupDownload">Download</button>&nbsp;
+            <button  id="popupPreview">Preview</button>&nbsp;
+            <button  id="popupDownload">Download</button>&nbsp;
             <button id="popupClose">Close</button>
         </div>
 
@@ -278,11 +308,11 @@
                 height="780" style="border: none;"></iframe>
         </div>
 
-        <br><br>
-        <h2 id="uploadDiv"><u>Upload</u></h2>
+
+        <h2 style="margin-top:0px;" id="uploadDiv"><u>Upload</u></h2>
         <form id="upload" enctype="multipart/form-data" action="/upload" method="post">
             <label>Upload file:</label>
-            <input id="uploadFile" type="file" name="file"><br><br>
+            <input style="margin : 0 auto;border: solid 1px black;" id="uploadFile" type="file" name="file"><br><br>
             <input id="publicUpload" type="submit" value="Upload (public)"><br><br>
             <button id="privateUpload">Upload (private)</button>
         </form>
@@ -330,12 +360,14 @@
             <button id="deletePrivate" type="submit">Delete Private File</button>
         </form><br><br>
 
-        <form action="/logout">
-            <input type="submit" value="Log out"></input>
+        <form id="logoutForm" action="/logout">
+            <button type="button" class="btn btn-danger">
+                <span class="glyphicon glyphicon-log-out"></span> Log out
+            </button>
         </form><br><br>
         <hr>
-
     </div>
+
 </body>
 
 </html>
