@@ -102,7 +102,7 @@
         $(document).ready(function () {
             $('input[type="submit"],button').addClass("btn btn-primary");
 
-            $("#logoutLink").click(function(){
+            $("#logoutLink,#logoutBtn").click(function(){
                 document.getElementById("logoutForm").submit();
             });
 
@@ -361,7 +361,7 @@
         </form><br><br>
 
         <form id="logoutForm" action="/logout">
-            <button type="button" class="btn btn-danger">
+            <button id="logoutBtn" type="button" class="btn btn-danger">
                 <span class="glyphicon glyphicon-log-out"></span> Log out
             </button>
         </form><br><br>
