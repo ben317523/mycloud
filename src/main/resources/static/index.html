@@ -121,10 +121,10 @@
             $('input[type="submit"],button').addClass("btn btn-primary");
 
             $("#logoutLink,#logoutBtn").click(function(){
-                document.getElementById("logoutForm").submit();
                 var backlen = history.length;
-                 history.go(-backlen);
-                 window.location.href = "/logout";
+                history.go(-backlen);
+                document.getElementById("logoutForm").submit();
+
             });
 
             $("#privateFileMakePublic").click(async function(e){
