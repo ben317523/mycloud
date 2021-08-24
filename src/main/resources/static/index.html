@@ -14,13 +14,13 @@
     <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="//rawgit.com/ngryman/jquery.finger/v0.1.2/dist/jquery.finger.js"></script>
     <script src="js/ajax.js"></script>
-    <script type="text/javascript">
-        function noBack() { window.history.forward(); }
-        noBack();
-        window.onload = noBack;
-        window.onpageshow = function (evt) { if (evt.persisted) noBack(); }
-        window.onunload = function () { void (0); }
-    </script>
+<!--    <script type="text/javascript">-->
+<!--        function noBack() { window.history.forward(); }-->
+<!--        noBack();-->
+<!--        window.onload = noBack;-->
+<!--        window.onpageshow = function (evt) { if (evt.persisted) noBack(); }-->
+<!--        window.onunload = function () { void (0); }-->
+<!--    </script>-->
     <style>
         html {
             height : 100%;
@@ -122,6 +122,9 @@
 
             $("#logoutLink,#logoutBtn").click(function(){
                 document.getElementById("logoutForm").submit();
+                var backlen = history.length;
+                 history.go(-backlen);
+                 window.location.href = "/logout";
             });
 
             $("#privateFileMakePublic").click(async function(e){
