@@ -183,6 +183,15 @@
                     download(event.target.innerText,true);
                 });
 
+                $("#popupDelete").click(function(e){
+                    e.preventDefault();
+                    let r = confirm("Delete This File "+event.target.innerText+"?");
+                    if (r == true){
+                        deleteFile(true,event.target.innerText);
+                    }
+
+                });
+
                 $("#popup").fadeIn('fast');
 
                 $("#popupPreview").click(async () => {
@@ -224,6 +233,15 @@
                 $("#popupDownload").click(function(e){
                     e.preventDefault();
                     download(event.target.innerText,false);
+                });
+
+                $("#popupDelete").click(function(e){
+                    e.preventDefault();
+                    let r = confirm("Delete This File "+event.target.innerText+"?");
+                    if (r == true){
+                        deleteFile(false,event.target.innerText);
+                    }
+
                 });
 
                 $("#popup").fadeIn('fast');
@@ -316,6 +334,7 @@
             <h4 id="popupSize">Size :</h4>
             <button  id="popupPreview">Preview</button>&nbsp;
             <button  id="popupDownload">Download</button>&nbsp;
+            <button id="popupDelete">Delete</button>
             <button id="popupClose">Close</button>
         </div>
 

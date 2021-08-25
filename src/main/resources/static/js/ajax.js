@@ -106,8 +106,12 @@ function downloadToServer(isPublic) {
     });
 }
 
-function deleteFile(isPublic) {
+function deleteFile(isPublic, customFilename) {
     var deleteName = $("#deleteName").prop("value");
+    if (customFilename){
+        deleteName = customFilename;
+    }
+
     $.post("/delete", { name: deleteName, isPublic: isPublic }, function (data, status) {
         if (status == "success") {
             console.log(data);
