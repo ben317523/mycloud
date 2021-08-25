@@ -22,7 +22,11 @@
 
     </style>
     <script>
-        sessionStorage.setItem("startLength",history.length);
+        if(typeof(Storage) !== "undefined"){
+            if (!sessionStorage.startLength){
+                sessionStorage.setItem("startLength",history.length);
+            }
+        }
 
 
         $(document).ready(function(){
