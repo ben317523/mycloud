@@ -128,8 +128,8 @@
         $(document).ready(function () {
             $('input[type="submit"],button').addClass("btn btn-primary");
 
-            $("#logoutLink,#logoutBtn").click(function(){
-
+            $("#logoutLink,#logoutBtn").click(async function(){
+                await $.get("/clearTemp");
                 document.getElementById("logoutForm").submit();
 
             });
@@ -160,7 +160,6 @@
                     $("#popupSize").text("Size :");
                 });
 
-                await $.get("/clearTemp");
                 location.reload();
                 //$('body').fadeTo('fast',1);
             });
