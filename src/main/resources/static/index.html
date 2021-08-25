@@ -121,8 +121,7 @@
             $('input[type="submit"],button').addClass("btn btn-primary");
 
             $("#logoutLink,#logoutBtn").click(function(){
-                var backlen = history.length;
-                history.go(-backlen);
+
                 document.getElementById("logoutForm").submit();
 
             });

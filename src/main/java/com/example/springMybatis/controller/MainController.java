@@ -119,7 +119,7 @@ public class MainController {
         uname.setMaxAge(0);
         response.addCookie(uname);
         //response.addHeader("Clear-Site-Data","\"cache\", \"cookies\", \"storage\", \"executionContexts\"");
-        return "<h1>Log Out!</h1><script>var newWindow; setTimeout(newWindow = window.open('login.html','_self'),1000);setTimeout(newWindow.close(),2000);</script>";
+        return "<h1 style='margin: 0 auto;'>Log Out!</h1><script>setTimeout(function(){var backlen = history.length - sessionStorage.getItem(\"startLength\");history.go(-backlen);},1000)</script>";
     }
 
 
