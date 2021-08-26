@@ -25,9 +25,15 @@
             justify-content : center;
             align-items : center;
         }
+
+        #data {
+            width : 500px;
+        }
     </style>
     <script>
         $(document).ready(function(){
+
+
             $("#submitBtn").click(function(e){
                 e.preventDefault();
                 var data = $('#data').prop("value");
@@ -48,7 +54,7 @@
     <h2>Generate QR Code :</h2>
     <form action="/file/qrcode">
         <label>Data :</label>
-        <input id="data" type="text" name="data"size="40%" ><br>
+        <input id="data" type="text" name="data" ><br>
         <input class="btn btn-primary" id="submitBtn" type="submit">
     </form><br>
 
