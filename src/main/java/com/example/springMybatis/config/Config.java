@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 @Configuration
 public class Config {
-    @Bean
+    //@Bean
     public HttpMessageConverter<BufferedImage> createImageHttpMessageConverter() {
         return new BufferedImageHttpMessageConverter();
     }

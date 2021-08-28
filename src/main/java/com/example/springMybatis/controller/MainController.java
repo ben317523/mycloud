@@ -51,6 +51,7 @@ public class MainController {
         users[3] = new User(3,"ken","123456");
         users[4] = new User(4,"pui","123456");
         users[5] = new User(5,"breonna","123456");
+        users[6] = new User(6,"music","123456");
     }
 
     /**
