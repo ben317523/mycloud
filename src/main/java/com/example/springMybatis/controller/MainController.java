@@ -43,6 +43,19 @@ public class MainController {
             File basePath = new File("/data/files");
             if (!basePath.exists())
                 basePath.mkdirs();
+
+            File tempPath = new File("/data/temp");
+            if (!tempPath.exists())
+                tempPath.mkdirs();
+
+            //Onedrive
+            File oneBasePath = new File("/root/OneDrive/data/files");
+            if (!oneBasePath.exists())
+                oneBasePath.mkdirs();
+
+            // File oneTempPath = new File("/root/OneDrive/data/temp");
+            // if (!oneTempPath.exists())
+            //     oneTempPath.mkdirs();
         }
         users = new User[10];
         users[0] = new User(0,"ben","89762230");
@@ -52,7 +65,22 @@ public class MainController {
         users[4] = new User(4,"pui","123456");
         users[5] = new User(5,"breonna","123456");
         users[6] = new User(6,"music","123456");
+        users[7] = new User(7,"video","123456");
+        users[8] = new User(8,"audio","123456");
+        users[9] = new User(9,"picture","123456");
+
+        for(User user : users){
+            File path = new File("/data/files/"+user.getUserName());
+            if (!path.exists())
+                path.mkdirs();
+
+            //Onedrive
+            File onedrivePath = new File("/root/OneDrive/data/files/"+user.getUserName());
+            if (!onedrivePath.exists())
+                onedrivePath.mkdirs();
+        }
     }
+
 
     /**
      *  index
@@ -284,15 +312,56 @@ public class MainController {
         if (!isPublic)
             targetName = name + "/" + targetName;
 
+        File uPath = new File("/data/files/"+name);
+        if (!uPath.exists())
+            uPath.mkdirs();
 
         Runtime run = Runtime.getRuntime();
 
-        Process p = null;
-        String cmd = "sudo wget -q -O /data/files/"+targetName+" "+url;
+        String agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36";
+
+        String[] cmd1 = {"ffmpeg","-user_agent", agent, "-i", url, "-c", "copy", "-bsf:a", "aac_adtstoasc", "/data/files/"+targetName+".mp4" };
+
+        ProcessBuilder p1 = new ProcessBuilder("wget","-q","-O","/data/files/"+targetName,url);
+        ProcessBuilder p2 = new ProcessBuilder(cmd1);
+
+        System.out.println("Download url command : "+ Arrays.toString(cmd1));
         try {
-            p = run.exec(cmd);
+
+
+            if (url.endsWith(".m3u8")) {
+                final Process p = p2.start();
+                /**
+                 * ————————————————
+                 *             版权声明：本文为CSDN博主「霞之秋诗羽」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+                 *             原文链接：https://blog.csdn.net/zyd573803837/article/details/109576612
+                 */
+                //打印错误信息
+                new Thread(() -> {
+                    BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                    String line = null;
+                    try {
+                        while ((line = err.readLine()) != null) {
+                            System.out.println("err:  " + line);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            err.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+                p.waitFor();
+                p.destroy();
+            } else {
+                Process p = p1.start();
+            }
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             e.printStackTrace();
             System.out.println("ERROR.RUNNING.CMD");
             return "not ok";
@@ -494,6 +563,49 @@ public class MainController {
             return "File not found!";
         }
     }
+
+    @RequestMapping("/moveToOnedrive")
+    @CrossOrigin(value = "*")
+    @ResponseBody
+    public String moveToOnedrive(@RequestParam("fileName")String fileName,
+                                 @CookieValue("name")String userName,
+                                 @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
+                                 @CookieValue("token")String userToken) {
+        if (userToken != null && token.equals(userToken))
+            System.out.println("valid token");
+        else
+            return "Unauthorized";
+
+        try {
+
+            if (isPublic) {
+                File path = new File("/data/files/" + fileName);
+
+                if (!path.exists())
+                    return "File not found!";
+
+                FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + fileName));
+
+                return "success";
+
+            } else {
+                File path = new File("/data/files/" + userName + "/" + fileName);
+
+                if (!path.exists())
+                    return "File not found!";
+
+                FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + userName + "/" + fileName));
+
+                return "success";
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "File not found!";
+        }
+    }
+
+
 
     public static Cookie search(Cookie[] cookies) {
         if (cookies == null)

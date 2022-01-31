@@ -137,3 +137,15 @@ function makePublic() {
 
     });
 }
+
+function moveToOnedrive(isPublic, fileName){
+    $.post("/moveToOnedrive", { fileName: fileName, isPublic: isPublic, name: $.cookie('name') }, function (data, status) {
+            if (status == "success") {
+                console.log(data);
+                alert("Move to Onedrive");
+            } else {
+                alert("Fail");
+            }
+            location.reload();
+        });
+}
