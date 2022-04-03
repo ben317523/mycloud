@@ -40,6 +40,14 @@
             width : 30%;
         }
 
+        #progressBar {
+            display : none;
+            position : fixed;
+            top : 25%;
+            margin-left : 35%;
+            width : 30%;
+        }
+
         #popup {
             display: none;
             border: 1px solid black;
@@ -343,6 +351,8 @@
     </nav>
 
     <img id="loading" src="img/loadingGif.gif">
+
+    <progress id="progressBar" value="0" max="100"></progress>
 
     <div id="main" class="d-flex flex-column align-items-center justify-content-between">
         <div id="popup" >

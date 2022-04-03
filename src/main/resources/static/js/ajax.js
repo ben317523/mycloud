@@ -6,10 +6,23 @@ function upload(fileId, path, isPublic) {
     if (files.length > 0) {
         $("#main").fadeTo('fast', 0.25);
         $("#loading").show();
+        $("#progressBar").show();
 
         fd.append('file', files[0]);
 
         $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = (evt.loaded / evt.total) * 100;
+                        // Place upload progress bar visibility code here
+                        var progress = Math.floor(percentComplete);
+                        $("#progressBar").attr("value", progress);
+                    }
+                }, false);
+                return xhr;
+            },
             type: 'POST',
             url: "/" + path + "?name=" + $.cookie('name') + "&token=" + $.cookie('token'),
             data: fd,
@@ -17,6 +30,8 @@ function upload(fileId, path, isPublic) {
             processData: false,
             success: function (response) {
                 $("#loading").hide();
+                $("#progressBar").hide();
+                $("#progressBar").attr("value", 0);
                 $("#main").fadeTo('fast', 1);
                 if (response != 0) {
                     alert('file uploaded');
@@ -24,7 +39,7 @@ function upload(fileId, path, isPublic) {
                     alert('file not uploaded');
                 }
                 location.reload();
-            },
+            }
         });
     } else {
         alert("Please select a file.");
