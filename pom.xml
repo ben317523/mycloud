@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>springMybatis</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>springMybatis</name>
-	<description>Demo project for Spring Boot</description>
+	<artifactId>MyCloud</artifactId>
+	<version>1.0</version>
+	<name>MyCloud</name>
+	<description>My Cloud (API version)</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -21,10 +21,10 @@
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
 <!--		</dependency>-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -75,6 +75,23 @@
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
 			<version>3.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
 	</dependencies>
