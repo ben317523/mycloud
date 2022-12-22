@@ -473,7 +473,7 @@ public class MainController {
     @RequestMapping("/moveToOnedrive")
     @CrossOrigin(value = "*")
     @ResponseBody
-    public String moveToOnedrive(@RequestParam("fileName")String fileName,
+    public ApiResponse moveToOnedrive(@RequestParam("fileName")String fileName,
                                  @RequestParam("name")String userName,
                                  @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
                                  @RequestHeader(value = "Authorization") String bearerToken) {
@@ -481,7 +481,7 @@ public class MainController {
         if (bearerToken != null && token.equals(bearerToken))
             System.out.println("valid token");
         else
-            return "Unauthorized";
+            return ApiResponse.fail("Invalid token");
 
         try {
 
@@ -489,26 +489,26 @@ public class MainController {
                 File path = new File("/data/files/" + fileName);
 
                 if (!path.exists())
-                    return "File not found!";
+                    return ApiResponse.fail("File not found!");
 
                 FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + fileName));
 
-                return "success";
+                return ApiResponse.success("success",null);
 
             } else {
                 File path = new File("/data/files/" + userName + "/" + fileName);
 
                 if (!path.exists())
-                    return "File not found!";
+                    return ApiResponse.fail("File not found!");
 
                 FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + userName + "/" + fileName));
 
-                return "success";
+                return ApiResponse.success("success",null);
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "File not found!";
+            return ApiResponse.fail("File not found!");
         }
     }
 
