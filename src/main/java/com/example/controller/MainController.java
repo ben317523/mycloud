@@ -474,10 +474,11 @@ public class MainController {
     @CrossOrigin(value = "*")
     @ResponseBody
     public String moveToOnedrive(@RequestParam("fileName")String fileName,
-                                 @CookieValue("name")String userName,
+                                 @RequestParam("name")String userName,
                                  @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
-                                 @CookieValue("token")String userToken) {
-        if (userToken != null && token.equals(userToken))
+                                 @RequestHeader(value = "Authorization") String bearerToken) {
+        bearerToken = bearerToken.split("\\s+")[1];
+        if (bearerToken != null && token.equals(bearerToken))
             System.out.println("valid token");
         else
             return "Unauthorized";
