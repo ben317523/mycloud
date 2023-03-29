@@ -491,9 +491,15 @@ public class MainController {
                 if (!path.exists())
                     return ApiResponse.fail("File not found!");
 
-                FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + fileName));
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + fileName));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-                return ApiResponse.success("success",null);
+                return ApiResponse.success("success, started",null);
 
             } else {
                 File path = new File("/data/files/" + userName + "/" + fileName);
@@ -501,9 +507,15 @@ public class MainController {
                 if (!path.exists())
                     return ApiResponse.fail("File not found!");
 
-                FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + userName + "/" + fileName));
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        FileCopyUtils.copy(path, new File("/root/OneDrive/data/files/" + userName + "/" + fileName));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-                return ApiResponse.success("success",null);
+                return ApiResponse.success("success, started",null);
             }
 
         } catch (Exception e) {
