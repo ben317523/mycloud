@@ -1,0 +1,1 @@
+ssh file "docker stop mycloud && docker rm mycloud && docker rmi ben317523/mycloud && docker run -d -p 8000:8081 -v /root/data/docker_data/myfileserver/data:/data -v /root/data/docker_data/myfileserver/OneDrive/data:/root/OneDrive/data --name mycloud ben317523/mycloud"

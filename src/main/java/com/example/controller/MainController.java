@@ -8,6 +8,7 @@ import com.example.entity.User;
 import com.example.service.FileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import com.example.util.JwtUtil;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
@@ -44,8 +45,10 @@ public class MainController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     public static List<User> users;
-    public static String token = "dsgufn-d626sfsdfJHiI-Nnfvas94832u9f-h8e9q-UGubgyuGSg-7sASYAHya-8ashOIHA-8ya8iHDT7id-hui";
 
     static {
         String os = System.getProperty("os.name");
@@ -89,11 +92,10 @@ public class MainController {
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
     public ApiResponse fileUpload(@RequestParam("file") MultipartFile file,
                                   HttpServletRequest request) throws IOException {
-        String bearerToken = request.getHeader("Authorization").split("\\s+")[1];
-
-        if (bearerToken != null && token.equals(bearerToken)){}
-        else
-            return ApiResponse.fail("Unauthorized");
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null) return ApiResponse.fail("Unauthorized");
+        String bearerToken = authorizationHeader.split("\\s+")[1];
+        if (!jwtUtil.validateToken(bearerToken)) return ApiResponse.fail("Unauthorized");
 
         boolean success = fileService.uploadFile(file, "/data/files/" + file.getOriginalFilename().replaceAll("[\\s\\[\\]{}]+", ""));
         if (success)
@@ -107,11 +109,10 @@ public class MainController {
     public ApiResponse privateUpload(@RequestParam("file") MultipartFile file,
                                      @RequestParam(value = "name") String name,
                                      HttpServletRequest request) throws IOException {
-        String bearerToken = request.getHeader("Authorization").split("\\s+")[1];
-
-        if (bearerToken != null && token.equals(bearerToken)) {}
-        else
-            return ApiResponse.fail("Unauthorized");
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null) return ApiResponse.fail("Unauthorized");
+        String bearerToken = authorizationHeader.split("\\s+")[1];
+        if (!jwtUtil.validateToken(bearerToken)) return ApiResponse.fail("Unauthorized");
 
         File userPath = new File("/data/files/"+name);
         if (!userPath.exists())
@@ -144,7 +145,7 @@ public class MainController {
             }
         }
 
-        if (bearerToken != null && token.equals(bearerToken))
+        if (bearerToken != null && jwtUtil.validateToken(bearerToken))
             System.out.println("valid token");
         else
             return ResponseEntity.status(403).body("Unauthorized");
@@ -204,9 +205,8 @@ public class MainController {
                                           @RequestParam("uname") String name,
                                           @RequestHeader(value = "Authorization") String bearerToken,
                                           HttpServletRequest request) throws IOException {
-        if (search(request.getCookies()) != null && token.equals(search(request.getCookies()).getValue()))
-            System.out.println("valid token");
-        else
+        String cookieToken = search(request.getCookies()) != null ? search(request.getCookies()).getValue() : null;
+        if (cookieToken == null || !jwtUtil.validateToken(cookieToken))
             return ResponseEntity.status(403).body("Unauthorized");
 
 
@@ -256,11 +256,9 @@ public class MainController {
                                 HttpServletRequest request) throws FileNotFoundException {
 
         bearerToken = bearerToken.split("\\s+")[1];
-
-        if (bearerToken != null && token.equals(bearerToken))
-        {}
-        else
+        if (bearerToken == null || !jwtUtil.validateToken(bearerToken)) {
             return ApiResponse.fail("Unauthorized");
+        }
 
         if (targetName == null || "".equals(targetName)){
             if (url.endsWith(".m3u8")){
@@ -356,12 +354,11 @@ public class MainController {
     @ResponseBody
     public ApiResponse getAllFiles(@RequestHeader(value = "Authorization",required = true) String bearerToken) {
         bearerToken = bearerToken.split("\\s+")[1];
-        if (bearerToken == null || !token.equals(bearerToken)) {
-            String[] t = new String[0];
+        if (bearerToken == null || !jwtUtil.validateToken(bearerToken)) {
             return ApiResponse.fail("Invalid token");
         }
 
-        return ApiResponse.success("all public files", fileService.getAllFiles(bearerToken));
+        return ApiResponse.success("all public files", fileService.getAllFiles());
     }
 
     @RequestMapping("preview")
@@ -371,7 +368,7 @@ public class MainController {
                         @RequestParam("isPublic")Boolean isPublic,
                         @RequestParam(value = "name",required = false, defaultValue = "")String name) throws IOException {
         userToken = userToken.split("\\s+")[1];
-        if (userToken == null || !token.equals(userToken))
+        if (userToken == null || !jwtUtil.validateToken(userToken))
             return "not ok";
         if (isPublic) {
             File srcFile = new File("/data/files/" + fileName);
@@ -405,9 +402,7 @@ public class MainController {
                                       @RequestParam("token")String userToken,
                                       @RequestParam("isPublic")Boolean isPublic,
                                       @RequestParam(value = "name",required = false)String name) {
-        if (userToken != null && token.equals(userToken))
-            System.out.println("valid token");
-        else
+        if (userToken == null || !jwtUtil.validateToken(userToken))
             return ResponseEntity.status(403).body("Unauthorized");
 
         return fileService.getFileInfo(fileName, userToken, isPublic, name);
@@ -417,12 +412,10 @@ public class MainController {
     @RequestMapping("/makePublic")
     @ResponseBody
     public ApiResponse makePublic(@RequestParam("privateFileName")String privateFileName,
-                             @RequestHeader("Authorization")String userToken,
-                             @RequestParam("name")String name) throws IOException {
-        if (userToken != null && token.equals(userToken))
-        {}
-        else
-            return ApiResponse.fail("Unauthorized");
+                              @RequestHeader("Authorization")String userToken,
+                              @RequestParam("name")String name) throws IOException {
+        userToken = userToken.split("\\s+")[1];
+        if (userToken == null || !jwtUtil.validateToken(userToken)) return ApiResponse.fail("Unauthorized");
 
         File src = new File("/data/files/"+name+"/"+privateFileName);
         if (!src.exists())
@@ -437,14 +430,11 @@ public class MainController {
     @CrossOrigin(value = "*")
     @ResponseBody
     public ApiResponse delete(@RequestParam("name")String name,
-                         @RequestParam("uname")String uname,
-                         @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
-                         @RequestHeader(value = "Authorization") String bearerToken) {
+                          @RequestParam("uname")String uname,
+                          @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
+                          @RequestHeader(value = "Authorization") String bearerToken) {
         bearerToken = bearerToken.split("\\s+")[1];
-        if (bearerToken != null && token.equals(bearerToken))
-        {}
-        else
-            return ApiResponse.fail("Unauthorized");
+        if (bearerToken == null || !jwtUtil.validateToken(bearerToken)) return ApiResponse.fail("Unauthorized");
 
         try {
             if (isPublic) {
@@ -474,14 +464,11 @@ public class MainController {
     @CrossOrigin(value = "*")
     @ResponseBody
     public ApiResponse moveToOnedrive(@RequestParam("fileName")String fileName,
-                                 @RequestParam("name")String userName,
-                                 @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
-                                 @RequestHeader(value = "Authorization") String bearerToken) {
+                                  @RequestParam("name")String userName,
+                                  @RequestParam(value = "isPublic",required = false,defaultValue ="true")Boolean isPublic,
+                                  @RequestHeader(value = "Authorization") String bearerToken) {
         bearerToken = bearerToken.split("\\s+")[1];
-        if (bearerToken != null && token.equals(bearerToken))
-            System.out.println("valid token");
-        else
-            return ApiResponse.fail("Invalid token");
+        if (bearerToken == null || !jwtUtil.validateToken(bearerToken)) return ApiResponse.fail("Invalid token");
 
         try {
 

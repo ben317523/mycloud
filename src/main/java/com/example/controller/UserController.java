@@ -5,7 +5,7 @@ import com.example.entity.ApiResponse;
 import com.example.entity.FileInfo;
 import com.example.entity.User;
 import com.example.entity.UserInfo;
-import com.example.constant.Token;
+import com.example.util.JwtUtil;
 import com.example.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,9 @@ public class UserController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private static int maxUsersNo = 50;
 
@@ -61,17 +64,9 @@ public class UserController {
                 user = t;
         }
         if (user != null) {
-            //response.addHeader("Allow","GET, POST");
-//            Cookie cookie = new Cookie("token",token);
-//            cookie.setMaxAge(60*60);
-//            response.addCookie(cookie);
-//
-//            Cookie uname = new Cookie("name",name);
-//            uname.setMaxAge(60*60);
-//            response.addCookie(uname);
-
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("token", Token.token);
+            String jwt = jwtUtil.generateToken(user.getUserName());
+            jsonObject.put("token", jwt);
 
             return ApiResponse.success("login successful", jsonObject);
         }
@@ -101,15 +96,15 @@ public class UserController {
     @ResponseBody
     public ApiResponse getUserInfo(@RequestParam("name")String uname,
                                       @RequestHeader(value = "Authorization") String bearerToken) {
-        bearerToken = bearerToken.split("\\s+")[1];
-        if (bearerToken != null && Token.token.equals(bearerToken))
-        {}
-        else
+        if (bearerToken == null) return ApiResponse.fail("Unauthorized");
+        String tokenOnly = bearerToken.split("\\s+")[1];
+        if (!jwtUtil.validateToken(tokenOnly)) {
             return ApiResponse.fail("Unauthorized");
+        }
 
         UserInfo data = new UserInfo();
         data.setName(uname);
-        data.setPublicNo(fileService.getAllFiles(Token.token).size());
+        data.setPublicNo(fileService.getAllFiles().size());
         data.setPrivateNo(fileService.getUserFiles(uname).size());
         List<FileInfo> userFiles = fileService.getUserFiles(uname);
         long totalSpace = 0;
@@ -129,7 +124,10 @@ public class UserController {
     @CrossOrigin("*")
     @ResponseBody
     public ApiResponse getUserFiles(@RequestParam("name")String name,
-                                    @RequestHeader(value = "Authorization") String bearerToken) {
+                                     @RequestHeader(value = "Authorization") String bearerToken) {
+        if (bearerToken == null) return ApiResponse.fail("Unauthorized");
+        String tokenOnly = bearerToken.split("\\s+")[1];
+        if (!jwtUtil.validateToken(tokenOnly)) return ApiResponse.fail("Unauthorized");
         try {
             File folder = new File("/data/files/"+name);
             if (!folder.exists())
